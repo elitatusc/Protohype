@@ -5,12 +5,20 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- ChangeSet 1: Reference 'Ingredients' table (no creation) -->
+    <!-- ChangeSet 1: Reference the 'Ingredients' table (no creation) -->
     <changeSet id="1" author="yourName">
         <preConditions onFail="CONTINUE">
             <tableExists tableName="Ingredients"/>
         </preConditions>
-        <!-- Foreign Key for Fridge_items -->
+        <!-- No table creation, just ensure the table exists -->
+    </changeSet>
+
+    <!-- ChangeSet 2: Reference the 'Fridge_items' table and foreign key (no creation) -->
+    <changeSet id="2" author="yourName">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="Fridge_items"/>
+        </preConditions>
+        <!-- Reference the existing foreign key constraint -->
         <addForeignKeyConstraint
                 baseTableName="Fridge_items"
                 baseColumnNames="ingredient_id"
@@ -21,28 +29,29 @@
                 onUpdate="NO ACTION"/>
     </changeSet>
 
-    <!-- ChangeSet 2: Reference 'Fridge_items' table (no creation) -->
-    <changeSet id="2" author="yourName">
-        <preConditions onFail="CONTINUE">
-            <tableExists tableName="Fridge_items"/>
-        </preConditions>
-        <!-- Foreign Key for Recipe_Ingredients -->
-        <addForeignKeyConstraint
-                baseTableName="Recipe_Ingredients"
-                baseColumnNames="ingredient_id"
-                referencedTableName="Fridge_items"
-                referencedColumnNames="ingredient_id"
-                constraintName="FK_Ingredients_Recipe_Ingredients"
-                onDelete="NO ACTION"
-                onUpdate="NO ACTION"/>
-    </changeSet>
-
-    <!-- ChangeSet 3: Reference 'Recipes' table (no creation) -->
+    <!-- ChangeSet 3: Reference the 'Recipes' table (no creation) -->
     <changeSet id="3" author="yourName">
         <preConditions onFail="CONTINUE">
             <tableExists tableName="Recipes"/>
         </preConditions>
-        <!-- Foreign Key for Recipe_Ingredients -->
+        <!-- No table creation, just ensure the table exists -->
+    </changeSet>
+
+    <!-- ChangeSet 4: Reference the 'Recipe_Ingredients' table and foreign keys (no creation) -->
+    <changeSet id="4" author="yourName">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="Recipe_Ingredients"/>
+        </preConditions>
+        <!-- Reference the existing foreign key constraints -->
+        <addForeignKeyConstraint
+                baseTableName="Recipe_Ingredients"
+                baseColumnNames="ingredient_id"
+                referencedTableName="Ingredients"
+                referencedColumnNames="ingredient_id"
+                constraintName="FK_Ingredients_Recipe_Ingredients"
+                onDelete="NO ACTION"
+                onUpdate="NO ACTION"/>
+
         <addForeignKeyConstraint
                 baseTableName="Recipe_Ingredients"
                 baseColumnNames="recipe_id"
@@ -53,14 +62,12 @@
                 onUpdate="NO ACTION"/>
     </changeSet>
 
-    <!-- ChangeSet 4: Create Index on Recipe_Ingredients (ingredient_id) -->
-    <changeSet id="4" author="yourName">
+    <!-- ChangeSet 5: Reference the existing index on Recipe_Ingredients (ingredient_id) -->
+    <changeSet id="5" author="yourName">
         <preConditions onFail="CONTINUE">
             <indexExists indexName="fki_FK_Ingredients_Recipe_Ingredients"/>
         </preConditions>
-        <createIndex indexName="fki_FK_Ingredients_Recipe_Ingredients" tableName="Recipe_Ingredients">
-            <column name="ingredient_id"/>
-        </createIndex>
+        <!-- No index creation, just ensure it exists -->
     </changeSet>
 
 </databaseChangeLog>
