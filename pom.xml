@@ -21,6 +21,47 @@
             <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>4.23.2</version> <!-- Use the latest version -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.6.0</version> <!-- idk which version we have guys i copied this -->
+        </dependency>
+
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Liquibase Maven Plugin
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.23.2</version>
+            </plugin>
+            -->
+
+            <!-- unsure about this, this is the user i created it with but maybe have to change if it doesnt work for you all -->
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>4.23.2</version>
+                <configuration>
+                    <changeLogFile>src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
+                    <url>jdbc:postgresql://localhost:5432/Recipie_suggestions</url>
+                    <username>postgres</username>
+                    <password>SCRAM-SHA-256$4096:RqYD9GqCjL8xjJHiJ2aUDg==$GbMJF1JOsMmsylnGl4lan+6GwUSbT7czait4XfOGDMc=:vMUN10iOJmbZZYeMqkcowOhvbQtmRG602QaFEt5cRb0=</password>
+                    <driver>org.postgresql.Driver</driver>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
 
 </project>
