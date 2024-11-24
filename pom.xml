@@ -55,7 +55,7 @@
                     <changeLogFile>src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
                     <url>jdbc:postgresql://localhost:5432/Recipie_suggestions</url>
                     <username>postgres</username>
-                    <password>SCRAM-SHA-256$4096:RqYD9GqCjL8xjJHiJ2aUDg==$GbMJF1JOsMmsylnGl4lan+6GwUSbT7czait4XfOGDMc=:vMUN10iOJmbZZYeMqkcowOhvbQtmRG602QaFEt5cRb0=</password>
+                    <password>Password</password>
                     <driver>org.postgresql.Driver</driver>
                 </configuration>
             </plugin>
