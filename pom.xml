@@ -33,6 +33,11 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.2</version> <!-- idk which version we have guys i copied this -->
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-graphics</artifactId>
+            <version>21-ea+24</version>
+        </dependency>
 
     </dependencies>
 
