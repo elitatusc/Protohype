@@ -5,39 +5,41 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+    <include file="test.xml" relativeToChangelogFile="true"/>
+
     <!-- ChangeSet 1: Ensure 'Ingredients' table exists (no creation) -->
-    <changeSet id="1" author="yourName">
-        <preConditions onFail="CONTINUE">
-            <tableExists tableName="Ingredients"/>
-        </preConditions>
-    </changeSet>
+<!--    <changeSet id="1" author="yourName">-->
+<!--        <preConditions onFail="CONTINUE">-->
+<!--            <tableExists tableName="Ingredients"/>-->
+<!--        </preConditions>-->
+<!--    </changeSet>-->
 
-    <!-- ChangeSet 2: Ensure 'Fridge_items' table exists (no creation) -->
-    <changeSet id="2" author="yourName">
-        <preConditions onFail="CONTINUE">
-            <tableExists tableName="Fridge_items"/>
-        </preConditions>
-    </changeSet>
+<!--    &lt;!&ndash; ChangeSet 2: Ensure 'Fridge_items' table exists (no creation) &ndash;&gt;-->
+<!--    <changeSet id="2" author="yourName">-->
+<!--        <preConditions onFail="CONTINUE">-->
+<!--            <tableExists tableName="Fridge_items"/>-->
+<!--        </preConditions>-->
+<!--    </changeSet>-->
 
-    <!-- ChangeSet 3: Ensure 'Recipes' table exists (no creation) -->
-    <changeSet id="3" author="yourName">
-        <preConditions onFail="CONTINUE">
-            <tableExists tableName="Recipes"/>
-        </preConditions>
-    </changeSet>
+<!--    &lt;!&ndash; ChangeSet 3: Ensure 'Recipes' table exists (no creation) &ndash;&gt;-->
+<!--    <changeSet id="3" author="yourName">-->
+<!--        <preConditions onFail="CONTINUE">-->
+<!--            <tableExists tableName="Recipes"/>-->
+<!--        </preConditions>-->
+<!--    </changeSet>-->
 
-    <!-- ChangeSet 4: Ensure 'Recipe_Ingredients' table exists (no creation) -->
-    <changeSet id="4" author="yourName">
-        <preConditions onFail="CONTINUE">
-            <tableExists tableName="Recipe_Ingredients"/>
-        </preConditions>
-    </changeSet>
+<!--    &lt;!&ndash; ChangeSet 4: Ensure 'Recipe_Ingredients' table exists (no creation) &ndash;&gt;-->
+<!--    <changeSet id="4" author="yourName">-->
+<!--        <preConditions onFail="CONTINUE">-->
+<!--            <tableExists tableName="Recipe_Ingredients"/>-->
+<!--        </preConditions>-->
+<!--    </changeSet>-->
 
-    <!-- ChangeSet 5: Ensure index exists on 'Recipe_Ingredients' for 'ingredient_id' (no creation) -->
-    <changeSet id="5" author="yourName">
-        <preConditions onFail="CONTINUE">
-            <indexExists indexName="fki_FK_Ingredients_Recipe_Ingredients"/>
-        </preConditions>
-    </changeSet>
+<!--    &lt;!&ndash; ChangeSet 5: Ensure index exists on 'Recipe_Ingredients' for 'ingredient_id' (no creation) &ndash;&gt;-->
+<!--    <changeSet id="5" author="yourName">-->
+<!--        <preConditions onFail="CONTINUE">-->
+<!--            <indexExists indexName="fki_FK_Ingredients_Recipe_Ingredients"/>-->
+<!--        </preConditions>-->
+<!--    </changeSet>-->
 
 </databaseChangeLog>
