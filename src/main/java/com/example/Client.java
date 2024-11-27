@@ -94,6 +94,10 @@ public class Client extends Application{
 
     }
 
+    public Client(){
+
+        me=this;
+    }
 
 
     public void initializeSocket(){
