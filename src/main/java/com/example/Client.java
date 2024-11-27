@@ -59,7 +59,7 @@ public class Client extends Application{
 
     }
 
-    public void requestService() {
+    public void requestService() { //when the button is pressed call requestService
         System.out.println("Client: Button pressed. Requesting recipes\n");
 
         //TO BE COMPLETED
