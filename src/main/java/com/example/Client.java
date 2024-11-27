@@ -172,6 +172,32 @@ public class Client extends Application{
         }
     }
 
+    public void execute(){
+        try {
+            DriverManager.registerDriver(new org.postgresql.Driver());
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        try{
+            //Initializes the socket
+            this.initializeSocket();
+
+            //Request service
+            this.requestService();
+
+            //Report user outcome of service
+            this.reportServiceOutcome();
+
+            //Close the connection with the server
+            this.clientSocket.close();
+
+        }catch(Exception e)
+        {// Raised if connection is refused or other technical issue
+            System.out.println("Client: Exception " + e);
+        }
+    }
+
 
     @Override
     public void start(Stage primaryStage) {
