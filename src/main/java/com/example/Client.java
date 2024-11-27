@@ -42,6 +42,20 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Client extends Application{
+    private Socket clientSocket = null;
+
+    public void initializeSocket(){
+
+        //TO BE COMPLETED
+        try {
+            clientSocket = new Socket(Credentials.HOST, Credentials.PORT);
+        }catch(UnknownHostException e){
+            System.out.println("Client: Unknown host. " + e);
+        }catch(IOException e){
+            System.out.println("Client: I/O error. " + e);
+        }
+
+    }
 
     @Override
     public void start(Stage primaryStage) {

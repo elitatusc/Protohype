@@ -36,6 +36,8 @@ public class Service extends Thread{
 
     //Retrieve the request from the socket
     public String[] retrieveRequest() {
+        //NEED TO WRITE
+        //
         return null;
 
     }
@@ -48,15 +50,21 @@ public class Service extends Thread{
 
         this.outcome = null;
 
-        String sql = "SELECT record.title, record.label, record.genre, record.rrp, " +
-                "COUNT (recordcopy.recordid) AS copyID FROM record INNER JOIN recordcopy ON " +
-                "record.recordid = recordcopy.recordid INNER JOIN artist ON " +
-                "record.artistid = artist.artistid INNER JOIN recordshop ON " +
-                "recordshop.recordshopid = recordcopy.recordshopid " +
-                "WHERE artist.lastname = ? AND recordshop.city = ? " + //do i need to make this so that onloan = f?
-                "GROUP BY record.title, record.label, record.genre, record.rrp;"; //TO BE COMPLETED- Update this line as needed.
-
-
+        String sql = "SELECT r.recipe_name, COUNT (ri.ingredient_id) AS total_ingredients,SUM(CASE" +
+                "WHEN fi.quantity_available >= ri.quantity_needed THEN 1" +
+                "WHEN fi.quantity_available IS NULL THEN 0 ELSE 0" +
+                "END) AS available_ingredients," +
+                "(SUM(CASE" +
+                "WHEN fi.quantity_available >= ri.quantity_needed THEN 1" +
+                "WHEN ri.quantity_needed IS NULL THEN 0" +
+                "ELSE 0" +
+                "END) * 100.0 / COUNT(ri.ingredient_id)) AS match_score" +
+                "FROM \"Recipes\" r" +
+                "JOIN \"Recipe_Ingredients\" ri ON r.recipe_id = ri.recipe_id" +
+                "LEFT JOIN \"Fridge_items\" fi ON ri.ingredient_id = fi.ingredient_id" +
+                "LEFT JOIN \"Ingredients\" i ON ri.ingredient_id = i.ingredient_id" +
+                "GROUP BY r.recipe_id, r.recipe_name" +
+                "ORDER BY match_score DESC;";
 
         try {
             //Connet to the database
@@ -69,8 +77,14 @@ public class Service extends Thread{
             //Make the query
             //TO BE COMPLETED
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, this.requestStr[0]); //surname
-            pstmt.setString(2, this.requestStr[1]); //city
+
+            //edit this
+//            pstmt.setString(1, this.requestStr[0]); //surname
+//            pstmt.setString(2, this.requestStr[1]); //city
+
+            pstmt.setString(1, this.requestStr[0]); //recipe_name
+            pstmt.setString(2, this.requestStr[1]); //match score
+
             ResultSet rs = pstmt.executeQuery();
 
             //Process query
@@ -97,10 +111,9 @@ public class Service extends Thread{
 
 
     //Wrap and return service outcome
-    public void returnServiceOutcome() {
+    public void returnServiceOutcome() { //MIGHT NEED TO CHANGED
         try {
             //Return outcome
-            //TO BE COMPLETED
 
             OutputStream outcomeStream = this.serviceSocket.getOutputStream();
             ObjectOutputStream outcomeStreamWriter = new ObjectOutputStream(outcomeStream);
@@ -110,7 +123,6 @@ public class Service extends Thread{
             System.out.println("Service thread " + this.getId() + ": Service outcome returned; " + this.outcome);
 
             //Terminating connection of the service socket
-            //TO BE COMPLETED
 
             this.serviceSocket.close();
 
