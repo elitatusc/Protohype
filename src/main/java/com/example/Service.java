@@ -15,7 +15,7 @@ import javax.sql.rowset.*;
 public class Service extends Thread{
 
     private Socket serviceSocket = null;
-    private String[] requestStr = new String[2]; //One slot for artist's name and one for recordshop's name.
+    private String[] requestStr = new String[2];
     private ResultSet outcome = null;
 
     //JDBC connection
@@ -67,7 +67,7 @@ public class Service extends Thread{
                 "LIMIT 5;\n";
 
         try {
-            //Connet to the database
+            //Connect to the database
             //TO BE COMPLETED
 
             //Class.forName("org.postgresql.Driver");
