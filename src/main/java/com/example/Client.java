@@ -211,16 +211,19 @@ public class Client extends Application{
 
         //This is the output table where all the recipes will be listed
         TableView<RecipeTable> recipeTable = new TableView<MyTableRecord>();
-        TableColumn<RecipeTable,String> titleCol     = new TableColumn<MyTableRecord,String>("Recipe Name");
-        TableColumn<RecipeTable,String> labelCol = new TableColumn<MyTableRecord,String>("Prep Time");
-        TableColumn<RecipeTable,String> genreCol     = new TableColumn<MyTableRecord,String>("Cook Time");
-        TableColumn<RecipeTable,String> rrpCol       = new TableColumn<MyTableRecord,String>("Total Time");
-        TableColumn<MyTableRecord,String> copyIDCol    = new TableColumn<MyTableRecord,String>("Difficulty");
-        titleCol.setCellValueFactory(new PropertyValueFactory("title"));
-        labelCol.setCellValueFactory(new PropertyValueFactory("label"));
-        genreCol.setCellValueFactory(new PropertyValueFactory("genre"));
-        rrpCol.setCellValueFactory(new PropertyValueFactory("rrp"));
-        copyIDCol.setCellValueFactory(new PropertyValueFactory("copyID"));
+        TableColumn<RecipeTable,String> recipe_name = new TableColumn<MyTableRecord,String>("Recipe Name");
+        TableColumn<RecipeTable,String> prep_time = new TableColumn<MyTableRecord,String>("Prep Time");
+        TableColumn<RecipeTable,String> cooking_time = new TableColumn<MyTableRecord,String>("Cook Time");
+        TableColumn<RecipeTable,String> total_time = new TableColumn<MyTableRecord,String>("Total Time");
+        TableColumn<RecipeTable,String> difficulty = new TableColumn<MyTableRecord,String>("Difficulty");
+
+        recipe_name.setCellValueFactory(new PropertyValueFactory("Recipe Name"));
+        prep_time.setCellValueFactory(new PropertyValueFactory("Prep Time"));
+        cooking_time.setCellValueFactory(new PropertyValueFactory("Cooking Time"));
+        total_time.setCellValueFactory(new PropertyValueFactory("Total Time"));
+        difficulty.setCellValueFactory(new PropertyValueFactory("Difficulty"));
+
+        GridPane.setConstraints(recipleTable, 0, 3, 3, 5);
 
 
     }
