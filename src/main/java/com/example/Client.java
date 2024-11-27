@@ -163,7 +163,7 @@ public class Client extends Application{
 
 
             String tmp = " ";
-            System.out.println(tmp +"\n====================================\n");
+            //System.out.println(tmp +"\n====================================\n");
         }catch(IOException e){
             System.out.println("Client: I/O error. " + e);
         }catch(ClassNotFoundException e){
