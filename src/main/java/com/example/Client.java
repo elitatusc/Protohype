@@ -94,6 +94,10 @@ public class Client extends Application{
 
     }
 
+    public Client(){
+
+        me=this;
+    }
 
 
     public void initializeSocket(){
@@ -116,7 +120,8 @@ public class Client extends Application{
 
         //should happen when button is pressed
         Service serv = new Service(clientSocket); //idk if this is client socket or not lol
-        serv.attendRequest();
+        serv.attendRequest(); //maybe dont need this?
+        //should actually call run in Service, because run calls attendRequest
     }
 
     public void reportServiceOutcome() {
@@ -158,7 +163,7 @@ public class Client extends Application{
 
 
             String tmp = " ";
-            System.out.println(tmp +"\n====================================\n");
+            //System.out.println(tmp +"\n====================================\n");
         }catch(IOException e){
             System.out.println("Client: I/O error. " + e);
         }catch(ClassNotFoundException e){
