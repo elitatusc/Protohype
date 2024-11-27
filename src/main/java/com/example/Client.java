@@ -232,12 +232,12 @@ public class Client extends Application{
         grid.getChildren().add(filter);
 
         //This is the output table where all the recipes will be listed
-        TableView<RecipeTable> recipeTable = new TableView<MyTableRecord>();
-        TableColumn<RecipeTable,String> recipe_name = new TableColumn<MyTableRecord,String>("Recipe Name");
-        TableColumn<RecipeTable,String> prep_time = new TableColumn<MyTableRecord,String>("Prep Time");
-        TableColumn<RecipeTable,String> cooking_time = new TableColumn<MyTableRecord,String>("Cook Time");
-        TableColumn<RecipeTable,String> total_time = new TableColumn<MyTableRecord,String>("Total Time");
-        TableColumn<RecipeTable,String> difficulty = new TableColumn<MyTableRecord,String>("Difficulty");
+        TableView<RecipeTable> recipeTable = new TableView<RecipeTable>();
+        TableColumn<RecipeTable,String> recipe_name = new TableColumn<RecipeTable,String>("Recipe Name");
+        TableColumn<RecipeTable,String> prep_time = new TableColumn<RecipeTable,String>("Prep Time");
+        TableColumn<RecipeTable,String> cooking_time = new TableColumn<RecipeTable,String>("Cook Time");
+        TableColumn<RecipeTable,String> total_time = new TableColumn<RecipeTable,String>("Total Time");
+        TableColumn<RecipeTable,String> difficulty = new TableColumn<RecipeTable,String>("Difficulty");
 
         recipe_name.setCellValueFactory(new PropertyValueFactory("Recipe Name"));
         prep_time.setCellValueFactory(new PropertyValueFactory("Prep Time"));
