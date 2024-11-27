@@ -210,12 +210,12 @@ public class Client extends Application{
         grid.getChildren().add(filter);
 
         //This is the output table where all the recipes will be listed
-        TableView<MyTableRecord> recipeTable = new TableView<MyTableRecord>();
-        TableColumn<MyTableRecord,String> titleCol     = new TableColumn<MyTableRecord,String>("Title");
-        TableColumn<MyTableRecord,String> labelCol = new TableColumn<MyTableRecord,String>("Label");
-        TableColumn<MyTableRecord,String> genreCol     = new TableColumn<MyTableRecord,String>("Genre");
-        TableColumn<MyTableRecord,String> rrpCol       = new TableColumn<MyTableRecord,String>("RRP");
-        TableColumn<MyTableRecord,String> copyIDCol    = new TableColumn<MyTableRecord,String>("Num. Copies");
+        TableView<RecipeTable> recipeTable = new TableView<MyTableRecord>();
+        TableColumn<RecipeTable,String> titleCol     = new TableColumn<MyTableRecord,String>("Recipe Name");
+        TableColumn<RecipeTable,String> labelCol = new TableColumn<MyTableRecord,String>("Prep Time");
+        TableColumn<RecipeTable,String> genreCol     = new TableColumn<MyTableRecord,String>("Cook Time");
+        TableColumn<RecipeTable,String> rrpCol       = new TableColumn<MyTableRecord,String>("Total Time");
+        TableColumn<MyTableRecord,String> copyIDCol    = new TableColumn<MyTableRecord,String>("Difficulty");
         titleCol.setCellValueFactory(new PropertyValueFactory("title"));
         labelCol.setCellValueFactory(new PropertyValueFactory("label"));
         genreCol.setCellValueFactory(new PropertyValueFactory("genre"));
