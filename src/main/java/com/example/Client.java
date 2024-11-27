@@ -58,39 +58,35 @@ public class Client extends Application{
         private StringProperty total_time;
         private StringProperty difficulty;
 
-        public void setTitle(String value) { titleProperty().set(value); }
-        public String getTitle() { return titleProperty().get(); }
-        public void setLabel(String value) { labelProperty().set(value); }
-        public String getLabel() { return labelProperty().get(); }
-        public void setGenre(String value) { genreProperty().set(value); }
-        public String getGenre() { return genreProperty().get(); }
-        public void setRrp(String value) { rrpProperty().set(value); }
-        public String getRrp() { return rrpProperty().get(); }
-        public void setCopyID(String value) { copyIDProperty().set(value); }
-        public String getCopyID() { return copyIDProperty().get(); }
+        public void setRecipeName(String value) { recipeNameProperty().set(value); }
+        public void setPrepTime(String value) { prepTimeProperty().set(value); }
+        public void setCookTime(String value) { cookTimeProperty().set(value); }
+        public void setTotalTime(String value) { totalTimeProperty().set(value); }
+        public void setDifficulty(String value) { difficultyProperty().set(value); }
 
 
-        public StringProperty titleProperty() {
+
+        public StringProperty recipeNameProperty() {
             if (recipe_name == null)
                 recipe_name = new SimpleStringProperty(this, "");
             return recipe_name;
         }
-        public StringProperty labelProperty() {
+        public StringProperty prepTimeProperty() {
             if (prep_time == null)
                 prep_time = new SimpleStringProperty(this, "");
             return prep_time;
         }
-        public StringProperty genreProperty() {
+        public StringProperty cookTimeProperty() {
             if (cook_time == null)
                 cook_time = new SimpleStringProperty(this, "");
             return cook_time;
         }
-        public StringProperty rrpProperty() {
+        public StringProperty totalTimeProperty() {
             if (total_time == null)
                 total_time = new SimpleStringProperty(this, "");
             return total_time;
         }
-        public StringProperty copyIDProperty() {
+        public StringProperty difficultyProperty() {
             if (difficulty == null)
                 difficulty = new SimpleStringProperty(this, "");
             return difficulty;
@@ -149,12 +145,12 @@ public class Client extends Application{
             tmpRecords.clear();
             while (this.serviceOutcome.next()) {
                 MyTableRecord record = new MyTableRecord();
-                record.setTitle(serviceOutcome.getString("recipe_name"));
-                record.setLabel(serviceOutcome.getString("prep_time"));
-                record.setGenre(serviceOutcome.getString("cook_time"));
-                record.setRrp(serviceOutcome.getString("total_time"));
-                record.setCopyID(serviceOutcome.getString("difficulty"));
-                System.out.println(record.getTitle() + " | " + record.getLabel() + record.getGenre() + " | " + record.getRrp() + " | " + record.getCopyID());
+                record.setRecipeName(serviceOutcome.getString("Recipe Name"));
+                record.setPrepTime(serviceOutcome.getString("Prep Time"));
+                record.setCookTime(serviceOutcome.getString("Cook Time"));
+                record.setTotalTime(serviceOutcome.getString("Total Time"));
+                record.setDifficulty(serviceOutcome.getString("Difficulty"));
+                //System.out.println(record.getTitle() + " | " + record.getLabel() + record.getGenre() + " | " + record.getRrp() + " | " + record.getCopyID());
 
                 tmpRecords.add(record);
             }
@@ -169,6 +165,32 @@ public class Client extends Application{
             System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
         }catch(SQLException e){
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
+        }
+    }
+
+    public void execute(){
+        try {
+            DriverManager.registerDriver(new org.postgresql.Driver());
+        }catch(Exception e){
+            System.out.println(e);
+        }
+
+        try{
+            //Initializes the socket
+            this.initializeSocket();
+
+            //Request service
+            this.requestService();
+
+            //Report user outcome of service
+            this.reportServiceOutcome();
+
+            //Close the connection with the server
+            this.clientSocket.close();
+
+        }catch(Exception e)
+        {// Raised if connection is refused or other technical issue
+            System.out.println("Client: Exception " + e);
         }
     }
 
