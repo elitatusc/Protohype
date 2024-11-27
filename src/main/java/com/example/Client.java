@@ -132,19 +132,19 @@ public class Client extends Application{
 
             //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
 
-            TableView<MyTableRecord> outputBox = new TableView<MyTableRecord>();
+            TableView<RecipeTable> outputBox = new TableView<RecipeTable>();
             GridPane grid = (GridPane) thePrimaryStage.getScene().getRoot();
 
             for(Node node : grid.getChildren()){
                 if(node instanceof TableView){
-                    outputBox = (TableView<MyTableRecord>) node;
+                    outputBox = (TableView<RecipeTable>) node;
                 }
             }
 
-            ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
+            ObservableList<RecipeTable> tmpRecords = outputBox.getItems();
             tmpRecords.clear();
             while (this.serviceOutcome.next()) {
-                MyTableRecord record = new MyTableRecord();
+                RecipeTable record = new RecipeTable();
                 record.setRecipeName(serviceOutcome.getString("Recipe Name"));
                 record.setPrepTime(serviceOutcome.getString("Prep Time"));
                 record.setCookTime(serviceOutcome.getString("Cook Time"));
