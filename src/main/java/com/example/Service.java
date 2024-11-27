@@ -34,12 +34,12 @@ public class Service extends Thread{
 
 
     //Retrieve the request from the socket
-    public String[] retrieveRequest() {
-        //NEED TO WRITE
-        //when the button is pressed, we then attend to the request
-        return null;
-
-    }
+//    public String[] retrieveRequest() {
+//        //NEED TO WRITE
+//        //when the button is pressed, we then attend to the request
+//        return null;
+//
+//    }
 
 
     //Parse the request command and execute the query
@@ -141,9 +141,9 @@ public class Service extends Thread{
         try {
             System.out.println("\n============================================\n");
             //Retrieve the service request from the socket
-            this.retrieveRequest();
-            System.out.println("Service thread " + this.getId() + ": Request retrieved: "
-                    + "artist->" + this.requestStr[0] + "; recordshop->" + this.requestStr[1]);
+//            this.retrieveRequest();
+//            System.out.println("Service thread " + this.getId() + ": Request retrieved: "
+//                    + "artist->" + this.requestStr[0] + "; recordshop->" + this.requestStr[1]);
 
             //Attend the request
             boolean tmp = this.attendRequest();
