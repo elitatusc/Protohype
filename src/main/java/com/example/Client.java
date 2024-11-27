@@ -204,7 +204,11 @@ public class Client extends Application{
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Recipe Suggestions");
 
-        //The main layout of the page
+
+
+    }
+
+    private Scene createScene1(Stage primaryStage) {
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(5);
@@ -250,8 +254,59 @@ public class Client extends Application{
         total_time.setCellValueFactory(new PropertyValueFactory("Total Time"));
         difficulty.setCellValueFactory(new PropertyValueFactory("Difficulty"));
 
-        GridPane.setConstraints(recipeTable, 0, 3, 3, 5);
+        recipeTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {  // Single-click to select
+                RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
+                if (selectedRecipe != null) {
+                    // Switch to Scene 2 when a row is clicked
+                    primaryStage.setScene(createScene2(primaryStage));
+                }
+            }
+        });
 
+        GridPane.setConstraints(recipeTable, 0, 3, 3, 5);
+        grid.getChildren().add(recipeTable);
+
+        return new Scene(grid, 300, 200);
+    }
+
+    private Scene createScene2(Stage primaryStage) {
+
+        //The main grid pane of the second scene
+        GridPane grid2 = new GridPane();
+        grid2.setPadding(new Insets(10, 10, 10, 10));
+        grid2.setVgap(5);
+        grid2.setHgap(5);
+
+        //This is the back button, when pressed, the first scene will be loaded
+        Button back = new Button();
+        back.setText("Generate Recipes");
+        back.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event){
+                Scene scene1 = createScene1(primaryStage); // Re-create Scene 1 if needed
+                primaryStage.setScene(scene1);
+            }
+        });
+        GridPane.setConstraints(back, 0, 0, 2, 1);
+        grid2.getChildren().add(back);
+
+        TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
+        TableColumn<RecipeTable,String> ingredient_name = new TableColumn<RecipeTable,String>("Ingredient");
+        TableColumn<RecipeTable,String> quantity_needed = new TableColumn<RecipeTable,String>("Quantity");
+
+        ingredient_name.setCellValueFactory(new PropertyValueFactory("Ingredient"));
+        quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
+
+        GridPane.setConstraints(ingredientsTable, 3, 2, 3, 5);
+        grid2.getChildren().add(ingredientsTable);
+
+        TextArea instructionsText = new TextArea();
+        instructionsText.setText(instructions);
+        grid2.getChildren().add(instructionsText);
+
+
+        return new Scene(grid2, 300, 200);
 
     }
 
