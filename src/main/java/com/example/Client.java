@@ -90,7 +90,7 @@ public class Client extends Application{
                 requestService();
             }
         });
-        GridPane.setConstraints(generate, 0, 2, 2, 1);
+        GridPane.setConstraints(generate, 0, 9, 2, 1);
         grid.getChildren().add(generate);
 
         //This is the filter button in the top left of the grid pane
@@ -103,8 +103,21 @@ public class Client extends Application{
                 //Make the filter recipes
             }
         });
-        GridPane.setConstraints(filter, 0, 2, 2, 1);
+        GridPane.setConstraints(filter, 0, 0, 2, 1);
         grid.getChildren().add(filter);
+
+        //This is the output table where all the recipes will be listed
+        TableView<MyTableRecord> recipeTable = new TableView<MyTableRecord>();
+        TableColumn<MyTableRecord,String> titleCol     = new TableColumn<MyTableRecord,String>("Title");
+        TableColumn<MyTableRecord,String> labelCol = new TableColumn<MyTableRecord,String>("Label");
+        TableColumn<MyTableRecord,String> genreCol     = new TableColumn<MyTableRecord,String>("Genre");
+        TableColumn<MyTableRecord,String> rrpCol       = new TableColumn<MyTableRecord,String>("RRP");
+        TableColumn<MyTableRecord,String> copyIDCol    = new TableColumn<MyTableRecord,String>("Num. Copies");
+        titleCol.setCellValueFactory(new PropertyValueFactory("title"));
+        labelCol.setCellValueFactory(new PropertyValueFactory("label"));
+        genreCol.setCellValueFactory(new PropertyValueFactory("genre"));
+        rrpCol.setCellValueFactory(new PropertyValueFactory("rrp"));
+        copyIDCol.setCellValueFactory(new PropertyValueFactory("copyID"));
 
 
     }
