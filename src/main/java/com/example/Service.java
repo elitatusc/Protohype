@@ -26,7 +26,6 @@ public class Service extends Thread{
 
     //Class constructor
     public Service(Socket aSocket) {
-
         //TO BE COMPLETED
         serviceSocket = aSocket;
         this.start();
