@@ -120,7 +120,7 @@ public class Client extends Application{
 
         //should happen when button is pressed
         Service serv = new Service(clientSocket); //idk if this is client socket or not lol
-        serv.attendRequest(); //maybe dont need this?
+        //serv.attendRequest(); //maybe dont need this?
         //should actually call run in Service, because run calls attendRequest
     }
 
