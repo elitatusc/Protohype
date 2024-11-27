@@ -51,7 +51,7 @@ public class Client extends Application{
 
 
     //Convenient to populate the TableView
-    public class MyTableRecord {
+    public class RecipeTable {
         private StringProperty recipe_name;
         private StringProperty prep_time;
         private StringProperty cook_time;
@@ -245,7 +245,7 @@ public class Client extends Application{
         total_time.setCellValueFactory(new PropertyValueFactory("Total Time"));
         difficulty.setCellValueFactory(new PropertyValueFactory("Difficulty"));
 
-        GridPane.setConstraints(recipleTable, 0, 3, 3, 5);
+        GridPane.setConstraints(recipeTable, 0, 3, 3, 5);
 
 
     }
