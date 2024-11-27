@@ -6,6 +6,6 @@ public class Main {
     }
 
     public String firstMethod(){
-        return "Checking if i can write a Junit test";
+        return "Checking if i can write aJunit test";
     }
 }
