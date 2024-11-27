@@ -44,6 +44,8 @@ import javafx.beans.property.SimpleStringProperty;
 public class Client extends Application{
     private Socket clientSocket = null;
 
+
+
     public void initializeSocket(){
 
         //TO BE COMPLETED
@@ -56,6 +58,17 @@ public class Client extends Application{
         }
 
     }
+
+    public void requestService() {
+        System.out.println("Client: Button pressed. Requesting recipes\n");
+
+        //TO BE COMPLETED
+
+        //should happen when button is pressed
+        Service serv = new Service(clientSocket); //idk if this is client socket or not lol
+        serv.attendRequest();
+    }
+
 
     @Override
     public void start(Stage primaryStage) {

@@ -26,7 +26,6 @@ public class Service extends Thread{
 
     //Class constructor
     public Service(Socket aSocket) {
-
         //TO BE COMPLETED
         serviceSocket = aSocket;
         this.start();
@@ -37,7 +36,7 @@ public class Service extends Thread{
     //Retrieve the request from the socket
     public String[] retrieveRequest() {
         //NEED TO WRITE
-        //
+        //when the button is pressed, we then attend to the request
         return null;
 
     }
@@ -83,6 +82,7 @@ public class Service extends Thread{
 //            pstmt.setString(1, this.requestStr[0]); //surname
 //            pstmt.setString(2, this.requestStr[1]); //city
 
+            //this gets sent to the client to be printed on the UI
             pstmt.setString(1, this.requestStr[0]); //recipe name
             pstmt.setString(2, this.requestStr[1]); //prep time
             pstmt.setString(2, this.requestStr[2]); //cook time

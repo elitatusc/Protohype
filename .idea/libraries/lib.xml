@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="file://$sepp$" />
+    </CLASSES>
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$sepp$" />
+    </NATIVE>
+    <SOURCES />
+    <jarDirectory url="file://$sepp$" recursive="false" />
+  </library>
+</component>
