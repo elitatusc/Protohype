@@ -50,21 +50,22 @@ public class Service extends Thread{
 
         this.outcome = null;
 
-        String sql = "SELECT r.recipe_name, COUNT (ri.ingredient_id) AS total_ingredients,SUM(CASE" +
-                "WHEN fi.quantity_available >= ri.quantity_needed THEN 1" +
-                "WHEN fi.quantity_available IS NULL THEN 0 ELSE 0" +
-                "END) AS available_ingredients," +
-                "(SUM(CASE" +
-                "WHEN fi.quantity_available >= ri.quantity_needed THEN 1" +
-                "WHEN ri.quantity_needed IS NULL THEN 0" +
-                "ELSE 0" +
-                "END) * 100.0 / COUNT(ri.ingredient_id)) AS match_score" +
-                "FROM \"Recipes\" r" +
-                "JOIN \"Recipe_Ingredients\" ri ON r.recipe_id = ri.recipe_id" +
-                "LEFT JOIN \"Fridge_items\" fi ON ri.ingredient_id = fi.ingredient_id" +
-                "LEFT JOIN \"Ingredients\" i ON ri.ingredient_id = i.ingredient_id" +
-                "GROUP BY r.recipe_id, r.recipe_name" +
-                "ORDER BY match_score DESC;";
+        String sql = "SELECT\n" +
+                "  r.recipe_name,\n" +
+                "  r.prep_time,\n" +
+                "  r.cook_time,\n" +
+                "  r.difficulty_level\n" +
+                "FROM \"Recipes\" r\n" +
+                "JOIN \"Recipe_Ingredients\" ri ON r.recipe_id = ri.recipe_id\n" +
+                "LEFT JOIN \"Fridge_items\" fi ON ri.ingredient_id = fi.ingredient_id\n" +
+                "LEFT JOIN \"Ingredients\" i ON ri.ingredient_id = i.ingredient_id\n" +
+                "GROUP BY r.recipe_id, r.recipe_name, r.prep_time, r.cook_time, r.difficulty_level\n" +
+                "ORDER BY (SUM(CASE\n" +
+                "    WHEN fi.quantity_available >= ri.quantity_needed THEN 1\n" +
+                "    WHEN ri.quantity_needed IS NULL THEN 0\n" +
+                "    ELSE 0\n" +
+                "  END) * 100.0 / COUNT(ri.ingredient_id))  DESC, r.recipe_name ASC\n" +
+                "LIMIT 5;\n";
 
         try {
             //Connet to the database
@@ -82,8 +83,11 @@ public class Service extends Thread{
 //            pstmt.setString(1, this.requestStr[0]); //surname
 //            pstmt.setString(2, this.requestStr[1]); //city
 
-            pstmt.setString(1, this.requestStr[0]); //recipe_name
-            pstmt.setString(2, this.requestStr[1]); //match score
+            pstmt.setString(1, this.requestStr[0]); //recipe name
+            pstmt.setString(2, this.requestStr[1]); //prep time
+            pstmt.setString(2, this.requestStr[2]); //cook time
+            pstmt.setString(2, this.requestStr[3]); //difficulty
+
 
             ResultSet rs = pstmt.executeQuery();
 
