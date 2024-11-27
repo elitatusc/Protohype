@@ -59,6 +59,40 @@ public class Client extends Application{
 
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setTitle("Recipe Suggestions");
+
+        //The main layout of the page
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setVgap(5);
+        grid.setHgap(5);
+
+        //This is the button you press to generate the recipes (fill out the table)
+        //It is places in the top right of the grid pane
+        Button generate = new Button();
+        generate.setText("Generate Recipes");
+        generate.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event){
+                requestService();
+            }
+        });
+        GridPane.setConstraints(generate, 0, 2, 2, 1);
+        grid.getChildren().add(generate);
+
+        //This is the filter button in the top left of the grid pane
+        Button filter = new Button();
+        filter.setText("Filter Recipes");
+        filter.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                //filterRecipes();
+                //Make the filter recipes
+            }
+        });
+        GridPane.setConstraints(filter, 0, 2, 2, 1);
+        grid.getChildren().add(filter);
+
 
     }
 
