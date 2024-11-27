@@ -52,11 +52,11 @@ public class Client extends Application{
 
     //Convenient to populate the TableView
     public class MyTableRecord {
-        private StringProperty title;
-        private StringProperty label;
-        private StringProperty genre;
-        private StringProperty rrp;
-        private StringProperty copyID;
+        private StringProperty recipe_name;
+        private StringProperty prep_time;
+        private StringProperty cook_time;
+        private StringProperty total_time;
+        private StringProperty difficulty;
 
         public void setTitle(String value) { titleProperty().set(value); }
         public String getTitle() { return titleProperty().get(); }
@@ -71,29 +71,29 @@ public class Client extends Application{
 
 
         public StringProperty titleProperty() {
-            if (title == null)
-                title = new SimpleStringProperty(this, "");
-            return title;
+            if (recipe_name == null)
+                recipe_name = new SimpleStringProperty(this, "");
+            return recipe_name;
         }
         public StringProperty labelProperty() {
-            if (label == null)
-                label = new SimpleStringProperty(this, "");
-            return label;
+            if (prep_time == null)
+                prep_time = new SimpleStringProperty(this, "");
+            return prep_time;
         }
         public StringProperty genreProperty() {
-            if (genre == null)
-                genre = new SimpleStringProperty(this, "");
-            return genre;
+            if (cook_time == null)
+                cook_time = new SimpleStringProperty(this, "");
+            return cook_time;
         }
         public StringProperty rrpProperty() {
-            if (rrp == null)
-                rrp = new SimpleStringProperty(this, "");
-            return rrp;
+            if (total_time == null)
+                total_time = new SimpleStringProperty(this, "");
+            return total_time;
         }
         public StringProperty copyIDProperty() {
-            if (copyID == null)
-                copyID = new SimpleStringProperty(this, "");
-            return copyID;
+            if (difficulty == null)
+                difficulty = new SimpleStringProperty(this, "");
+            return difficulty;
         }
 
     }
@@ -149,11 +149,11 @@ public class Client extends Application{
             tmpRecords.clear();
             while (this.serviceOutcome.next()) {
                 MyTableRecord record = new MyTableRecord();
-                record.setTitle(serviceOutcome.getString("title"));
-                record.setLabel(serviceOutcome.getString("label"));
-                record.setGenre(serviceOutcome.getString("genre"));
-                record.setRrp(serviceOutcome.getString("rrp"));
-                record.setCopyID(serviceOutcome.getString("copyID"));
+                record.setTitle(serviceOutcome.getString("recipe_name"));
+                record.setLabel(serviceOutcome.getString("prep_time"));
+                record.setGenre(serviceOutcome.getString("cook_time"));
+                record.setRrp(serviceOutcome.getString("total_time"));
+                record.setCopyID(serviceOutcome.getString("difficulty"));
                 System.out.println(record.getTitle() + " | " + record.getLabel() + record.getGenre() + " | " + record.getRrp() + " | " + record.getCopyID());
 
                 tmpRecords.add(record);
@@ -219,7 +219,7 @@ public class Client extends Application{
                 requestService();
             }
         });
-        GridPane.setConstraints(generate, 0, 2, 2, 1);
+        GridPane.setConstraints(generate, 0, 9, 2, 1);
         grid.getChildren().add(generate);
 
         //This is the filter button in the top left of the grid pane
@@ -232,8 +232,21 @@ public class Client extends Application{
                 //Make the filter recipes
             }
         });
-        GridPane.setConstraints(filter, 0, 2, 2, 1);
+        GridPane.setConstraints(filter, 0, 0, 2, 1);
         grid.getChildren().add(filter);
+
+        //This is the output table where all the recipes will be listed
+        TableView<RecipeTable> recipeTable = new TableView<MyTableRecord>();
+        TableColumn<RecipeTable,String> titleCol     = new TableColumn<MyTableRecord,String>("Recipe Name");
+        TableColumn<RecipeTable,String> labelCol = new TableColumn<MyTableRecord,String>("Prep Time");
+        TableColumn<RecipeTable,String> genreCol     = new TableColumn<MyTableRecord,String>("Cook Time");
+        TableColumn<RecipeTable,String> rrpCol       = new TableColumn<MyTableRecord,String>("Total Time");
+        TableColumn<MyTableRecord,String> copyIDCol    = new TableColumn<MyTableRecord,String>("Difficulty");
+        titleCol.setCellValueFactory(new PropertyValueFactory("title"));
+        labelCol.setCellValueFactory(new PropertyValueFactory("label"));
+        genreCol.setCellValueFactory(new PropertyValueFactory("genre"));
+        rrpCol.setCellValueFactory(new PropertyValueFactory("rrp"));
+        copyIDCol.setCellValueFactory(new PropertyValueFactory("copyID"));
 
 
     }
