@@ -51,7 +51,8 @@ public class Client extends Application{
 
 
     //Convenient to populate the TableView
-    public class MyTableRecord {
+    public class RecipeTable
+    {
         private StringProperty recipe_name;
         private StringProperty prep_time;
         private StringProperty cook_time;
@@ -134,21 +135,28 @@ public class Client extends Application{
 
             //TableView outputBox = (TableView) thePrimaryStage.getScene().getRoot(); //error is here
 
-            //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
+            //ObservableList<RecipeTable
+            // > tmpRecords = outputBox.getItems();
 
-            TableView<MyTableRecord> outputBox = new TableView<MyTableRecord>();
+            TableView<RecipeTable
+                    > outputBox = new TableView<RecipeTable
+                    >();
             GridPane grid = (GridPane) thePrimaryStage.getScene().getRoot();
 
             for(Node node : grid.getChildren()){
                 if(node instanceof TableView){
-                    outputBox = (TableView<MyTableRecord>) node;
+                    outputBox = (TableView<RecipeTable
+                            >) node;
                 }
             }
 
-            ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
+            ObservableList<RecipeTable
+                    > tmpRecords = outputBox.getItems();
             tmpRecords.clear();
             while (this.serviceOutcome.next()) {
-                MyTableRecord record = new MyTableRecord();
+                RecipeTable
+                        record = new RecipeTable
+                        ();
                 record.setTitle(serviceOutcome.getString("recipe_name"));
                 record.setLabel(serviceOutcome.getString("prep_time"));
                 record.setGenre(serviceOutcome.getString("cook_time"));
@@ -236,12 +244,19 @@ public class Client extends Application{
         grid.getChildren().add(filter);
 
         //This is the output table where all the recipes will be listed
-        TableView<RecipeTable> recipeTable = new TableView<MyTableRecord>();
-        TableColumn<RecipeTable,String> titleCol     = new TableColumn<MyTableRecord,String>("Recipe Name");
-        TableColumn<RecipeTable,String> labelCol = new TableColumn<MyTableRecord,String>("Prep Time");
-        TableColumn<RecipeTable,String> genreCol     = new TableColumn<MyTableRecord,String>("Cook Time");
-        TableColumn<RecipeTable,String> rrpCol       = new TableColumn<MyTableRecord,String>("Total Time");
-        TableColumn<MyTableRecord,String> copyIDCol    = new TableColumn<MyTableRecord,String>("Difficulty");
+        TableView<RecipeTable> recipeTable = new TableView<RecipeTable
+                >();
+        TableColumn<RecipeTable,String> titleCol     = new TableColumn<RecipeTable
+                ,String>("Recipe Name");
+        TableColumn<RecipeTable,String> labelCol = new TableColumn<RecipeTable
+                ,String>("Prep Time");
+        TableColumn<RecipeTable,String> genreCol     = new TableColumn<RecipeTable
+                ,String>("Cook Time");
+        TableColumn<RecipeTable,String> rrpCol       = new TableColumn<RecipeTable
+                ,String>("Total Time");
+        TableColumn<RecipeTable
+                ,String> copyIDCol    = new TableColumn<RecipeTable
+                ,String>("Difficulty");
         titleCol.setCellValueFactory(new PropertyValueFactory("title"));
         labelCol.setCellValueFactory(new PropertyValueFactory("label"));
         genreCol.setCellValueFactory(new PropertyValueFactory("genre"));
