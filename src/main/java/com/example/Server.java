@@ -55,7 +55,7 @@ public class Server {
                 //TO BE COMPLETED
 
                 Socket aSocket = this.serverSocket.accept();
-                Service tempServiceThread = new Service(aSocket); //do i need to start this thread?
+                Service tempServiceThread = new Service(aSocket); //do I need to start this thread?
 
             }
         } catch (Exception e){
