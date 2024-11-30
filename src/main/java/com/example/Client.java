@@ -23,6 +23,7 @@ import javax.sql.rowset.CachedRowSet;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -57,12 +58,19 @@ public class Client extends Application{
         private StringProperty cook_time;
         private StringProperty total_time;
         private StringProperty difficulty;
+        private StringProperty ingredients;
+        private StringProperty instructions;
+        private StringProperty quantity;
+
 
         public void setRecipeName(String value) { recipeNameProperty().set(value); }
         public void setPrepTime(String value) { prepTimeProperty().set(value); }
         public void setCookTime(String value) { cookTimeProperty().set(value); }
         public void setTotalTime(String value) { totalTimeProperty().set(value); }
         public void setDifficulty(String value) { difficultyProperty().set(value); }
+        public void setIngredients(String value) { ingredientsProperty().set(value); }
+        public void setInstructions(String value) { instructionsProperty().set(value); }
+        public void setQuantity(String value) { quantityProperty().set(value); }
 
 
 
@@ -90,6 +98,21 @@ public class Client extends Application{
             if (difficulty == null)
                 difficulty = new SimpleStringProperty(this, "");
             return difficulty;
+        }
+        public StringProperty ingredientsProperty() {
+            if (ingredients == null)
+                ingredients = new SimpleStringProperty(this, "");
+            return ingredients;
+        }
+        public StringProperty instructionsProperty() {
+            if (instructions == null)
+                instructions = new SimpleStringProperty(this, "");
+            return instructions;
+        }
+        public StringProperty quantityProperty() {
+            if (quantity == null)
+                quantity = new SimpleStringProperty(this, "");
+            return quantity;
         }
 
     }
@@ -122,27 +145,11 @@ public class Client extends Application{
         Service serv = new Service(clientSocket); //idk if this is client socket or not lol
         //serv.attendRequest(); //maybe dont need this?
         //should actually call run in Service, because run calls attendRequest
-
-//        try {
-//
-//            //TO BE COMPLETED
-//
-//            OutputStream requestStream = this.clientSocket.getOutputStream();
-//            OutputStreamWriter requestStreamWriter = new OutputStreamWriter(requestStream);
-//            requestStreamWriter.flush();
-//
-//        }catch(IOException e){
-//            System.out.println("Client: I/O error. " + e);
-//        }
-
     }
 
-    public void reportServiceOutcome() {
+    public void reportServiceOutcomeRecipes() {
         try {
-
-            //TO BE COMPLETED
-
-            InputStream outcomeStream = clientSocket.getInputStream(); //clientSocket here is null, isnt getting initialised
+            InputStream outcomeStream = clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
 
@@ -150,16 +157,14 @@ public class Client extends Application{
 
             //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
 
-            TableView<RecipeTable> outputBox = new TableView<RecipeTable>();
-            GridPane grid = (GridPane) thePrimaryStage.getScene().getRoot();
+            TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+            //Getting the border pane from the stage
+            //This will allow us to put the results in there
+            TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getCenter();
+            //Accessing the table that is in the centre of the borderPane
 
-            for(Node node : grid.getChildren()){
-                if(node instanceof TableView){
-                    outputBox = (TableView<RecipeTable>) node;
-                }
-            }
-
-            ObservableList<RecipeTable> tmpRecipes = outputBox.getItems();
+            ObservableList<RecipeTable> tmpRecipes = outputTable.getItems();
             tmpRecipes.clear();
             while (this.serviceOutcome.next()) {
                 RecipeTable recipe = new RecipeTable();
@@ -168,11 +173,12 @@ public class Client extends Application{
                 recipe.setCookTime(serviceOutcome.getString("Cook Time"));
                 recipe.setTotalTime(serviceOutcome.getString("Total Time"));
                 recipe.setDifficulty(serviceOutcome.getString("Difficulty"));
-                //System.out.println(record.getTitle() + " | " + record.getLabel() + record.getGenre() + " | " + record.getRrp() + " | " + record.getCopyID());
+                //System.out.println(recipe.getRecipeName() + " | " + recipe.getLabel() + recipe.getGenre() + " | " + recipe.getRrp() + " | " + record.getCopyID());
+                //Can do this later as need to do get methods
 
                 tmpRecipes.add(recipe);
             }
-            outputBox.setItems(tmpRecipes);
+            outputTable.setItems(tmpRecipes);
 
 
             String tmp = " ";
@@ -185,6 +191,52 @@ public class Client extends Application{
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
         }
     }
+
+    public void reportServiceOutcomeInstructions() {
+        try {
+
+            InputStream outcomeStream = clientSocket.getInputStream();
+            ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
+            serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
+
+            TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+            //Getting the border pane from the stage
+            //This will allow us to put the results in there
+            TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getCenter();
+            //Accessing the table that is in the centre of the borderPane
+
+            ObservableList<RecipeTable> tmpInstructions = outputTable.getItems();
+            tmpInstructions.clear();
+            while (this.serviceOutcome.next()) {
+                RecipeTable recipe = new RecipeTable();
+                recipe.setRecipeName(serviceOutcome.getString("Recipe Name"));
+                recipe.setPrepTime(serviceOutcome.getString("Prep Time"));
+                recipe.setCookTime(serviceOutcome.getString("Cook Time"));
+                recipe.setTotalTime(serviceOutcome.getString("Total Time"));
+                recipe.setDifficulty(serviceOutcome.getString("Difficulty"));
+                recipe.setInstructions(serviceOutcome.getString("Instructions"));
+                recipe.setIngredients(serviceOutcome.getString("Ingredients"));
+                recipe.setQuantity(serviceOutcome.getString("Quantity"));
+                //Need to have the output be in this specific order or will be wrong
+
+                tmpInstructions.add(recipe);
+            }
+            outputTable.setItems(tmpInstructions);
+
+
+            String tmp = " ";
+            //System.out.println(tmp +"\n====================================\n");
+        }catch(IOException e){
+            System.out.println("Client: I/O error. " + e);
+        }catch(ClassNotFoundException e){
+            System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
+        }catch(SQLException e){
+            System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
+        }
+    }
+
+
 
     public void execute(){
         try {
@@ -201,7 +253,7 @@ public class Client extends Application{
             this.requestService();
 
             //Report user outcome of service
-            this.reportServiceOutcome();
+            this.reportServiceOutcomeRecipes();
 
             //Close the connection with the server
             this.clientSocket.close();
@@ -241,9 +293,8 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-//                Scene scene2 = createScene2(primaryStage);
-//                primaryStage.setScene(scene2);
-                me.execute();
+                Scene scene2 = createScene2(primaryStage);
+                primaryStage.setScene(scene2);
             }
         });
         buttonsBox.getChildren().add(generate);
@@ -281,17 +332,16 @@ public class Client extends Application{
         difficulty.setCellValueFactory(new PropertyValueFactory("Difficulty"));
 
         recipeTable.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 1) {  // Single-click to select
+            if (event.getClickCount() == 1) {  //if user clicks then event will be triggered
                 RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
                 if (selectedRecipe != null) {
                     // Switch to Scene 2 when a row is clicked
                     primaryStage.setScene(createScene2(primaryStage));
+                    primaryStage.setScene(scene2);
+
                 }
             }
         });
-
-        GridPane.setConstraints(recipeTable, 0, 3, 10, 15);
-        grid.getChildren().add(recipeTable);
 
         borderPane.setTop(buttonsBox);   // Top section for the button
         borderPane.setCenter(recipeTable);
@@ -300,16 +350,14 @@ public class Client extends Application{
     }
 
     private Scene createScene2(Stage primaryStage) {
-        reportServiceOutcome();
         //The main grid pane of the second scene
-        GridPane grid2 = new GridPane();
-        grid2.setPadding(new Insets(10, 10, 10, 10));
-        grid2.setVgap(5);
-        grid2.setHgap(5);
+        BorderPane borderPane = new BorderPane();
+        HBox labelBox = new HBox();
+        VBox rightPane = new VBox();
 
         //This is the back button, when pressed, the first scene will be loaded
         Button back = new Button();
-        back.setText("Generate Recipes");
+        back.setText("Back");
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
@@ -317,26 +365,35 @@ public class Client extends Application{
                 primaryStage.setScene(scene1);
             }
         });
-        GridPane.setConstraints(back, 0, 0, 2, 1);
-        grid2.getChildren().add(back);
+        labelBox.getChildren().add(back);
 
+        //Adding the recipe name to the top of the scene
+        Label recipeName = new Label("Temp label");
+        labelBox.getChildren().add(recipeName);
+        HBox.setHgrow(recipeName, javafx.scene.layout.Priority.ALWAYS);
+        recipeName.setAlignment(Pos.CENTER);
+
+        Label ingredientsLabel = new Label("Ingredients");
+
+        //Making the table where the ingredients and quantities will go
         TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
         TableColumn<RecipeTable,String> ingredient_name = new TableColumn<RecipeTable,String>("Ingredient");
         TableColumn<RecipeTable,String> quantity_needed = new TableColumn<RecipeTable,String>("Quantity");
+        rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
 
         ingredient_name.setCellValueFactory(new PropertyValueFactory("Ingredient"));
         quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
-
-        GridPane.setConstraints(ingredientsTable, 3, 2, 3, 5);
-        grid2.getChildren().add(ingredientsTable);
+        borderPane.setRight(rightPane);
+        //Will go on the right hand side of the screen
 
         TextArea instructionsText = new TextArea();
         instructionsText.setText("This is where the instructions go");
-        grid2.getChildren().add(instructionsText);
+        borderPane.setCenter(instructionsText);
 
+        borderPane.setTop(labelBox);
 
-        return new Scene(grid2, 600, 600);
-
+        //reportServiceOutcomeInstructions();
+        return new Scene(borderPane, 800, 600);
     }
 
     public static void main (String[] args) {
