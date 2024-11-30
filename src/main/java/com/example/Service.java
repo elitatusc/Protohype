@@ -99,7 +99,7 @@ public class Service extends Thread{
             RowSetFactory aFactory = RowSetProvider.newFactory();
             CachedRowSet crs = aFactory.createCachedRowSet();
             crs.populate(rs);  //need to reset the iterator of rs??
-            this.outcome = crs;
+            this.outcome = crs; //now populated
 
             rs.close();
             pstmt.close();
