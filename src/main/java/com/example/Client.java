@@ -124,7 +124,7 @@ public class Client extends Application{
         //should actually call run in Service, because run calls attendRequest
     }
 
-    public void reportServiceOutcome() {
+    public void reportServiceOutcomeRecipes() {
         try {
 
             //TO BE COMPLETED
@@ -137,16 +137,14 @@ public class Client extends Application{
 
             //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
 
-            TableView<RecipeTable> outputBox = new TableView<RecipeTable>();
-            GridPane grid = (GridPane) thePrimaryStage.getScene().getRoot();
+            TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+            //Getting the border pane from the stage
+            //This will allow us to put the results in there
+            TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getCenter();
+            //Accessing the table that is in the centre of the borderPane
 
-            for(Node node : grid.getChildren()){
-                if(node instanceof TableView){
-                    outputBox = (TableView<RecipeTable>) node;
-                }
-            }
-
-            ObservableList<RecipeTable> tmpRecipes = outputBox.getItems();
+            ObservableList<RecipeTable> tmpRecipes = outputTable.getItems();
             tmpRecipes.clear();
             while (this.serviceOutcome.next()) {
                 RecipeTable recipe = new RecipeTable();
@@ -155,11 +153,12 @@ public class Client extends Application{
                 recipe.setCookTime(serviceOutcome.getString("Cook Time"));
                 recipe.setTotalTime(serviceOutcome.getString("Total Time"));
                 recipe.setDifficulty(serviceOutcome.getString("Difficulty"));
-                //System.out.println(record.getTitle() + " | " + record.getLabel() + record.getGenre() + " | " + record.getRrp() + " | " + record.getCopyID());
+                //System.out.println(recipe.getRecipeName() + " | " + recipe.getLabel() + recipe.getGenre() + " | " + recipe.getRrp() + " | " + record.getCopyID());
+                //Can do this later as need to do get methods
 
                 tmpRecipes.add(recipe);
             }
-            outputBox.setItems(tmpRecipes);
+            outputTable.setItems(tmpRecipes);
 
 
             String tmp = " ";
@@ -188,7 +187,7 @@ public class Client extends Application{
             this.requestService();
 
             //Report user outcome of service
-            this.reportServiceOutcome();
+            this.reportServiceOutcomeRecipes();
 
             //Close the connection with the server
             this.clientSocket.close();
@@ -228,8 +227,7 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene2 = createScene2(primaryStage);
-                primaryStage.setScene(scene2);
+                me.execute();
             }
         });
         buttonsBox.getChildren().add(generate);
@@ -272,6 +270,7 @@ public class Client extends Application{
                 if (selectedRecipe != null) {
                     // Switch to Scene 2 when a row is clicked
                     primaryStage.setScene(createScene2(primaryStage));
+                    primaryStage.setScene(scene2);
                 }
             }
         });
@@ -286,7 +285,6 @@ public class Client extends Application{
     }
 
     private Scene createScene2(Stage primaryStage) {
-        reportServiceOutcome();
         //The main grid pane of the second scene
         GridPane grid2 = new GridPane();
         grid2.setPadding(new Insets(10, 10, 10, 10));
