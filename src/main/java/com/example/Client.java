@@ -227,7 +227,8 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                requestService();
+                //requestService();
+                me.execute();
             }
         });
         GridPane.setConstraints(generate, 0, 9, 2, 1);
