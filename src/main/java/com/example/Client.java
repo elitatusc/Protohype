@@ -32,14 +32,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.ToolBar;
 
 public class Client extends Application{
 
@@ -146,20 +146,20 @@ public class Client extends Application{
                 }
             }
 
-            ObservableList<RecipeTable> tmpRecords = outputBox.getItems();
-            tmpRecords.clear();
+            ObservableList<RecipeTable> tmpRecipes = outputBox.getItems();
+            tmpRecipes.clear();
             while (this.serviceOutcome.next()) {
-                RecipeTable record = new RecipeTable();
-                record.setRecipeName(serviceOutcome.getString("Recipe Name"));
-                record.setPrepTime(serviceOutcome.getString("Prep Time"));
-                record.setCookTime(serviceOutcome.getString("Cook Time"));
-                record.setTotalTime(serviceOutcome.getString("Total Time"));
-                record.setDifficulty(serviceOutcome.getString("Difficulty"));
+                RecipeTable recipe = new RecipeTable();
+                recipe.setRecipeName(serviceOutcome.getString("Recipe Name"));
+                recipe.setPrepTime(serviceOutcome.getString("Prep Time"));
+                recipe.setCookTime(serviceOutcome.getString("Cook Time"));
+                recipe.setTotalTime(serviceOutcome.getString("Total Time"));
+                recipe.setDifficulty(serviceOutcome.getString("Difficulty"));
                 //System.out.println(record.getTitle() + " | " + record.getLabel() + record.getGenre() + " | " + record.getRrp() + " | " + record.getCopyID());
 
-                tmpRecords.add(record);
+                tmpRecipes.add(recipe);
             }
-            outputBox.setItems(tmpRecords);
+            outputBox.setItems(tmpRecipes);
 
 
             String tmp = " ";
@@ -216,36 +216,41 @@ public class Client extends Application{
 
     private Scene createScene1(Stage primaryStage) {
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(5);
-        grid.setHgap(5);
+        BorderPane borderPane = new BorderPane();
+        ToolBar leftToolBar = new ToolBar();
+        ToolBar rightToolBar = new ToolBar();
+        HBox buttonsBox = new HBox();
+
 
         //This is the button you press to generate the recipes (fill out the table)
-        //It is places in the top right of the grid pane
         Button generate = new Button();
         generate.setText("Generate Recipes");
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                //requestService();
-                me.execute();
+                Scene scene2 = createScene2(primaryStage);
+                primaryStage.setScene(scene2);
             }
         });
-        GridPane.setConstraints(generate, 0, 9, 2, 1);
-        grid.getChildren().add(generate);
+        buttonsBox.getChildren().add(generate);
 
-        //This is the filter button in the top left of the grid pane
+        Pane expanding = new Pane();
+        buttonsBox.getChildren().add(expanding);
+        HBox.setHgrow(expanding, Priority.ALWAYS);
+        expanding.setMaxWidth(Double.MAX_VALUE);
+
+        //This is the filter button in the top right of the grid pane
         Button filter = new Button();
         filter.setText("Filter Recipes");
         filter.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 //filterRecipes();
-                //Make the filter recipes
+                //Make the filter recipes function
             }
         });
-        GridPane.setConstraints(filter, 0, 0, 2, 1);
-        grid.getChildren().add(filter);
+        buttonsBox.getChildren().add(filter);
+
 
         //This is the output table where all the recipes will be listed
         TableView<RecipeTable> recipeTable = new TableView<RecipeTable>();
@@ -271,14 +276,17 @@ public class Client extends Application{
             }
         });
 
-        GridPane.setConstraints(recipeTable, 0, 3, 3, 5);
+        GridPane.setConstraints(recipeTable, 0, 3, 10, 15);
         grid.getChildren().add(recipeTable);
 
-        return new Scene(grid, 300, 200);
+        borderPane.setTop(buttonsBox);   // Top section for the button
+        borderPane.setCenter(recipeTable);
+
+        return new Scene(borderPane, 800, 600);
     }
 
     private Scene createScene2(Stage primaryStage) {
-
+        reportServiceOutcome();
         //The main grid pane of the second scene
         GridPane grid2 = new GridPane();
         grid2.setPadding(new Insets(10, 10, 10, 10));
@@ -313,7 +321,7 @@ public class Client extends Application{
         grid2.getChildren().add(instructionsText);
 
 
-        return new Scene(grid2, 300, 200);
+        return new Scene(grid2, 600, 600);
 
     }
 
