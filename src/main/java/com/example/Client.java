@@ -203,6 +203,10 @@ public class Client extends Application{
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Recipe Suggestions");
+        //call createScene1
+        Scene scene1 = createScene1(primaryStage);
+        primaryStage.setScene(scene1);
+        primaryStage.show();
 
 
 
@@ -302,7 +306,7 @@ public class Client extends Application{
         grid2.getChildren().add(ingredientsTable);
 
         TextArea instructionsText = new TextArea();
-        instructionsText.setText(instructions);
+        //instructionsText.setText(instructions);
         grid2.getChildren().add(instructionsText);
 
 
