@@ -198,18 +198,20 @@ public class Client extends Application{
             System.out.println("Client: Exception " + e);
         }
     }
+    private Scene scene1;
+    private Scene scene2;
 
-
+    private TableView<RecipeTable> recipeTable;
+    private Stage primaryStage;
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Recipe Suggestions");
-        //call createScene1
+        // Create Scene 1 and Scene 2
         Scene scene1 = createScene1(primaryStage);
+
+        // Set the initial scene
+        primaryStage.setTitle("Recipe Suggestions");
         primaryStage.setScene(scene1);
         primaryStage.show();
-
-
-
     }
 
     private Scene createScene1(Stage primaryStage) {
@@ -288,7 +290,7 @@ public class Client extends Application{
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene1 = createScene1(primaryStage); // Re-create Scene 1 if needed
+                Scene scene1 = createScene1(primaryStage);
                 primaryStage.setScene(scene1);
             }
         });
@@ -306,7 +308,7 @@ public class Client extends Application{
         grid2.getChildren().add(ingredientsTable);
 
         TextArea instructionsText = new TextArea();
-        //instructionsText.setText(instructions);
+        instructionsText.setText("This is where the instructions go");
         grid2.getChildren().add(instructionsText);
 
 
