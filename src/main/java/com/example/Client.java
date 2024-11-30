@@ -122,6 +122,19 @@ public class Client extends Application{
         Service serv = new Service(clientSocket); //idk if this is client socket or not lol
         //serv.attendRequest(); //maybe dont need this?
         //should actually call run in Service, because run calls attendRequest
+
+//        try {
+//
+//            //TO BE COMPLETED
+//
+//            OutputStream requestStream = this.clientSocket.getOutputStream();
+//            OutputStreamWriter requestStreamWriter = new OutputStreamWriter(requestStream);
+//            requestStreamWriter.flush();
+//
+//        }catch(IOException e){
+//            System.out.println("Client: I/O error. " + e);
+//        }
+
     }
 
     public void reportServiceOutcome() {
@@ -129,7 +142,7 @@ public class Client extends Application{
 
             //TO BE COMPLETED
 
-            InputStream outcomeStream = clientSocket.getInputStream();
+            InputStream outcomeStream = clientSocket.getInputStream(); //clientSocket here is null, isnt getting initialised
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
 
@@ -228,8 +241,9 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene2 = createScene2(primaryStage);
-                primaryStage.setScene(scene2);
+//                Scene scene2 = createScene2(primaryStage);
+//                primaryStage.setScene(scene2);
+                me.execute();
             }
         });
         buttonsBox.getChildren().add(generate);

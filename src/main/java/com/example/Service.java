@@ -46,7 +46,6 @@ public class Service extends Thread{
     public boolean attendRequest()
     {
         boolean flagRequestAttended = true;
-
         this.outcome = null;
 
         String sql = "SELECT\n" +
@@ -55,8 +54,8 @@ public class Service extends Thread{
                 "  r.cook_time,\n" +
                 "  r.difficulty_level\n" +
                 "FROM \"Recipes\" r\n" +
-                "JOIN \"Recipe_Ingredients\" ri ON r.recipe_id = ri.recipe_id\n" +
-                "LEFT JOIN \"Fridge_items\" fi ON ri.ingredient_id = fi.ingredient_id\n" +
+                "JOIN \"Recipe_ingredients\" ri ON r.recipe_id = ri.recipe_id\n" +
+                "LEFT JOIN \"Fridge_Ingredients\" fi ON ri.ingredient_id = fi.ingredient_id\n" +
                 "LEFT JOIN \"Ingredients\" i ON ri.ingredient_id = i.ingredient_id\n" +
                 "GROUP BY r.recipe_id, r.recipe_name, r.prep_time, r.cook_time, r.difficulty_level\n" +
                 "ORDER BY (SUM(CASE\n" +
@@ -83,10 +82,12 @@ public class Service extends Thread{
 //            pstmt.setString(2, this.requestStr[1]); //city
 
             //this gets sent to the client to be printed on the UI
-            pstmt.setString(1, this.requestStr[0]); //recipe name
-            pstmt.setString(2, this.requestStr[1]); //prep time
-            pstmt.setString(2, this.requestStr[2]); //cook time
-            pstmt.setString(2, this.requestStr[3]); //difficulty
+
+            //don't actually need this as the SQL statement never changes
+//            pstmt.setString(1, this.requestStr[0]); //recipe name
+//            pstmt.setString(2, this.requestStr[1]); //prep time
+//            pstmt.setString(2, this.requestStr[2]); //cook time
+//            pstmt.setString(2, this.requestStr[3]); //difficulty
 
 
             ResultSet rs = pstmt.executeQuery();
@@ -94,13 +95,11 @@ public class Service extends Thread{
             //Process query
             //TO BE COMPLETED -  Watch out! You may need to reset the iterator of the row set.
 
+
             RowSetFactory aFactory = RowSetProvider.newFactory();
             CachedRowSet crs = aFactory.createCachedRowSet();
             crs.populate(rs);  //need to reset the iterator of rs??
             this.outcome = crs;
-
-            //Clean up
-            //TO BE COMPLETED
 
             rs.close();
             pstmt.close();
