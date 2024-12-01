@@ -174,7 +174,9 @@ public class Client extends Application{
             BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
             //Getting the border pane from the stage
             //This will allow us to put the results in there
-            TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getCenter();
+            if (borderPane.getRight() != null) {
+                TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getRight();
+            }
             //Accessing the table that is in the centre of the borderPane
 
             ObservableList<RecipeTable> tmpRecipes = outputTable.getItems();
@@ -208,16 +210,20 @@ public class Client extends Application{
     public void reportServiceOutcomeInstructions() {
         try {
 
+            /*BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+
             InputStream outcomeStream = clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
+            //The first line of output is the recipe name, so we set this first
+            Label recipeName = new Label();
+            BorderPane topPane = borderPane.getTop();
+            recipeName = topPane.getCenter();
 
             TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
-            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
-            //Getting the border pane from the stage
-            //This will allow us to put the results in there
-            TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getCenter();
-            //Accessing the table that is in the centre of the borderPane
+            TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getRight();
+            //Accessing the ingredient table that is on the right side of the borderPane
+            while (this.serviceOutcome.next()) {
 
             ObservableList<RecipeTable> tmpInstructions = outputTable.getItems();
             tmpInstructions.clear();
@@ -246,6 +252,7 @@ public class Client extends Application{
             System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
         }catch(SQLException e){
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
+        } */
         }
     }
 
@@ -304,11 +311,13 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                //Scene scene2 = createScene2(primaryStage);
-                //primaryStage.setScene(scene2);
-                me.execute();
+                Scene scene2 = createScene2();
+                primaryStage.setScene(scene2);
+                //me.execute();
             }
         });
+        generate.setStyle("-fx-font-size: 14px;");
+
         buttonsBox.getChildren().add(generate);
 
         Pane expanding = new Pane();
@@ -327,6 +336,7 @@ public class Client extends Application{
             }
         });
         buttonsBox.getChildren().add(filter);
+        filter.setStyle("-fx-font-size: 14px;");
 
 
         //This is the output table where all the recipes will be listed
@@ -365,6 +375,7 @@ public class Client extends Application{
         BorderPane borderPane = new BorderPane();
         HBox labelBox = new HBox();
         VBox rightPane = new VBox();
+        BorderPane topPane = new BorderPane();
 
         //This is the back button, when pressed, the first scene will be loaded
         Button back = new Button();
@@ -375,15 +386,23 @@ public class Client extends Application{
                 primaryStage.setScene(createScene1());
             }
         });
-        labelBox.getChildren().add(back);
+        //labelBox.getChildren().add(back);
+        back.setStyle("-fx-font-size: 14px;");
+        topPane.setLeft(back);
+        Label temp = new Label("         ");
+        topPane.setRight(temp);
+        //This label is only here to try and fix the positioning of the recipeName label
 
         //Adding the recipe name to the top of the scene
         Label recipeName = new Label("Temp label");
-        labelBox.getChildren().add(recipeName);
-        HBox.setHgrow(recipeName, javafx.scene.layout.Priority.ALWAYS);
-        recipeName.setAlignment(Pos.CENTER);
+        //labelBox.getChildren().add(recipeName);
+        //HBox.setHgrow(recipeName, javafx.scene.layout.Priority.ALWAYS);
+        //labelBox.setAlignment(Pos.CENTER);
+        topPane.setCenter(recipeName);
+        recipeName.setStyle("-fx-font-size: 18px;");
 
         Label ingredientsLabel = new Label("Ingredients");
+        ingredientsLabel.setStyle("-fx-font-size: 16px;");
 
         //Making the table where the ingredients and quantities will go
         TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
@@ -400,7 +419,7 @@ public class Client extends Application{
         instructionsText.setText("This is where the instructions go");
         borderPane.setCenter(instructionsText);
 
-        borderPane.setTop(labelBox);
+        borderPane.setTop(topPane);
 
         //reportServiceOutcomeInstructions();
         return new Scene(borderPane, 800, 600);
