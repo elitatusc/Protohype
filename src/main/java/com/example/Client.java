@@ -171,7 +171,7 @@ public class Client extends Application{
             //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
 
             TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
-            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
             //Getting the border pane from the stage
             //This will allow us to put the results in there
             TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getCenter();
