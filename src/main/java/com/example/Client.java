@@ -284,7 +284,8 @@ public class Client extends Application{
     @Override
     public void start(Stage primaryStage) {
         // Create Scene 1 and Scene 2
-        Scene scene1 = createScene1(primaryStage);
+        this.primaryStage = primaryStage;
+        Scene scene1 = createScene1();
 
         // Set the initial scene
         primaryStage.setTitle("Recipe Suggestions");
@@ -292,11 +293,8 @@ public class Client extends Application{
         primaryStage.show();
     }
 
-    private Scene createScene1(Stage primaryStage) {
-        GridPane grid = new GridPane();
+    private Scene createScene1() {
         BorderPane borderPane = new BorderPane();
-        ToolBar leftToolBar = new ToolBar();
-        ToolBar rightToolBar = new ToolBar();
         HBox buttonsBox = new HBox();
 
 
@@ -306,8 +304,8 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene2 = createScene2(primaryStage);
-                primaryStage.setScene(scene2);
+                //Scene scene2 = createScene2(primaryStage);
+                //primaryStage.setScene(scene2);
                 me.execute();
             }
         });
@@ -350,8 +348,7 @@ public class Client extends Application{
                 RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
                 if (selectedRecipe != null) {
                     // Switch to Scene 2 when a row is clicked
-                    primaryStage.setScene(createScene2(primaryStage));
-                    primaryStage.setScene(scene2);
+                    primaryStage.setScene(createScene2());
 
                 }
             }
@@ -363,7 +360,7 @@ public class Client extends Application{
         return new Scene(borderPane, 800, 600);
     }
 
-    private Scene createScene2(Stage primaryStage) {
+    private Scene createScene2() {
         //The main grid pane of the second scene
         BorderPane borderPane = new BorderPane();
         HBox labelBox = new HBox();
@@ -375,8 +372,7 @@ public class Client extends Application{
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene1 = createScene1(primaryStage);
-                primaryStage.setScene(scene1);
+                primaryStage.setScene(createScene1());
             }
         });
         labelBox.getChildren().add(back);
