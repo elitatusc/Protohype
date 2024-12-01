@@ -141,10 +141,22 @@ public class Client extends Application{
         System.out.println("Client: Button pressed. Requesting recipes\n");
 
         //TO BE COMPLETED
+        try {
+            //TO BE COMPLETED
+            OutputStream requestStream = this.clientSocket.getOutputStream();
+            OutputStreamWriter requestStreamWriter = new OutputStreamWriter(requestStream);
+            requestStreamWriter.write("generate#");
+            requestStreamWriter.flush(); //Service request sent
+
+        }catch(IOException e){
+            System.out.println("Client: I/O error. " + e);
+            System.exit(1);
+        }
 
         //should happen when button is pressed
-        Service serv = new Service(clientSocket); //idk if this is client socket or not lol
-        //serv.attendRequest(); //maybe dont need this?
+        //Service serv = new Service(clientSocket); //idk if this is client socket or not lol
+        //serv.start();
+        //serv.run();//maybe dont need this?
         //should actually call run in Service, because run calls attendRequest
     }
 
@@ -240,11 +252,11 @@ public class Client extends Application{
 
 
     public void execute(){
-        try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-        }catch(Exception e){
-            System.out.println(e);
-        }
+//        try {
+//            DriverManager.registerDriver(new org.postgresql.Driver());
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
 
         try{
             //Initializes the socket
@@ -296,6 +308,7 @@ public class Client extends Application{
             public void handle(ActionEvent event){
                 Scene scene2 = createScene2(primaryStage);
                 primaryStage.setScene(scene2);
+                me.execute();
             }
         });
         buttonsBox.getChildren().add(generate);

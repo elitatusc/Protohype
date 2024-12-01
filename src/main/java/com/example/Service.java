@@ -12,10 +12,10 @@ import java.net.Socket;
 import java.sql.*;
 import javax.sql.rowset.*;
 
-public class Service extends Thread{
+public class Service extends Thread {
 
     private Socket serviceSocket = null;
-    private String[] requestStr = new String[2];
+    private String[] requestStr = new String[1];
     private ResultSet outcome = null;
 
     //JDBC connection
@@ -34,15 +34,43 @@ public class Service extends Thread{
 
 
     //Retrieve the request from the socket
-//    public String[] retrieveRequest() {
-//        //NEED TO WRITE
-//        //when the button is pressed, we then attend to the request
-//        return null;
-//
-//    }
+    public String[] retrieveRequest() {
+        //NEED TO WRITE
+        //when the button is pressed, we then attend to the request
 
+        this.requestStr[0] = "";
 
-    //Parse the request command and execute the query
+        String tmp = "";
+        try {
+            //TO BE COMPLETED
+            InputStream socketStream = this.serviceSocket.getInputStream();
+            InputStreamReader socketReader = new InputStreamReader(socketStream);
+            StringBuffer stringBuffer = new StringBuffer();
+
+            //String receivedLine = socketReader.read();
+            char y;
+            while(true){
+                y = (char) socketReader.read();
+                if (y == '#'){
+                    break;
+                }
+                stringBuffer.append(y);
+            }
+            tmp = stringBuffer.toString();
+
+            if ("generate".equals(tmp)) {
+                this.requestStr[0] = tmp;
+            } else {
+                throw new IOException("Socket did not connect properly to Server.");
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return this.requestStr;
+    }
+
+        //Parse the request command and execute the query
     public boolean attendRequest()
     {
         boolean flagRequestAttended = true;
@@ -54,8 +82,8 @@ public class Service extends Thread{
                 "  r.cook_time,\n" +
                 "  r.difficulty_level\n" +
                 "FROM \"Recipes\" r\n" +
-                "JOIN \"Recipe_ingredients\" ri ON r.recipe_id = ri.recipe_id\n" +
-                "LEFT JOIN \"Fridge_Ingredients\" fi ON ri.ingredient_id = fi.ingredient_id\n" +
+                "JOIN \"Recipe_Ingredients\" ri ON r.recipe_id = ri.recipe_id\n" +
+                "LEFT JOIN \"Fridge_items\" fi ON ri.ingredient_id = fi.ingredient_id\n" +
                 "LEFT JOIN \"Ingredients\" i ON ri.ingredient_id = i.ingredient_id\n" +
                 "GROUP BY r.recipe_id, r.recipe_name, r.prep_time, r.cook_time, r.difficulty_level\n" +
                 "ORDER BY (SUM(CASE\n" +
@@ -70,7 +98,7 @@ public class Service extends Thread{
             //TO BE COMPLETED
 
             //Class.forName("org.postgresql.Driver");
-            //DriverManager.registerDriver(new org.postgresql.Driver());
+            DriverManager.registerDriver(new org.postgresql.Driver());
             Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             //Make the query
@@ -140,7 +168,7 @@ public class Service extends Thread{
         try {
             System.out.println("\n============================================\n");
             //Retrieve the service request from the socket
-//            this.retrieveRequest();
+            this.retrieveRequest();
 //            System.out.println("Service thread " + this.getId() + ": Request retrieved: "
 //                    + "artist->" + this.requestStr[0] + "; recordshop->" + this.requestStr[1]);
 
