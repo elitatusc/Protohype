@@ -15,7 +15,7 @@ import javax.sql.rowset.*;
 public class Service extends Thread{
 
     private Socket serviceSocket = null;
-    private String[] requestStr = new String[4];
+    private String[] requestStr = new String[2];
     private ResultSet outcome = null;
 
     //JDBC connection
@@ -43,9 +43,9 @@ public class Service extends Thread{
 
 
     //Parse the request command and execute the query
-    public boolean attendRequest() {
+    public boolean attendRequest()
+    {
         boolean flagRequestAttended = true;
-
         this.outcome = null;
 
         String sql = "SELECT\n" +
@@ -54,8 +54,8 @@ public class Service extends Thread{
                 "  r.cook_time,\n" +
                 "  r.difficulty_level\n" +
                 "FROM \"Recipes\" r\n" +
-                "JOIN \"Recipe_Ingredients\" ri ON r.recipe_id = ri.recipe_id\n" +
-                "LEFT JOIN \"Fridge_items\" fi ON ri.ingredient_id = fi.ingredient_id\n" +
+                "JOIN \"Recipe_ingredients\" ri ON r.recipe_id = ri.recipe_id\n" +
+                "LEFT JOIN \"Fridge_Ingredients\" fi ON ri.ingredient_id = fi.ingredient_id\n" +
                 "LEFT JOIN \"Ingredients\" i ON ri.ingredient_id = i.ingredient_id\n" +
                 "GROUP BY r.recipe_id, r.recipe_name, r.prep_time, r.cook_time, r.difficulty_level\n" +
                 "ORDER BY (SUM(CASE\n" +
@@ -75,7 +75,6 @@ public class Service extends Thread{
 
             //Make the query
             //TO BE COMPLETED
-            System.out.println("hello i'm here");
             PreparedStatement pstmt = con.prepareStatement(sql);
 
             //edit this
@@ -83,37 +82,34 @@ public class Service extends Thread{
 //            pstmt.setString(2, this.requestStr[1]); //city
 
             //this gets sent to the client to be printed on the UI
-            pstmt.setString(1, this.requestStr[0]); //recipe name
-            pstmt.setString(2, this.requestStr[1]); //prep time
-            pstmt.setString(3, this.requestStr[2]); //cook time
-            pstmt.setString(4, this.requestStr[3]); //difficulty
 
-            System.out.println("and here");
+            //don't actually need this as the SQL statement never changes
+//            pstmt.setString(1, this.requestStr[0]); //recipe name
+//            pstmt.setString(2, this.requestStr[1]); //prep time
+//            pstmt.setString(2, this.requestStr[2]); //cook time
+//            pstmt.setString(2, this.requestStr[3]); //difficulty
+
+
             ResultSet rs = pstmt.executeQuery();
 
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            System.out.println("Number of columns: " + columnCount);
-                //Process query
-                //TO BE COMPLETED -  Watch out! You may need to reset the iterator of the row set.
+            //Process query
+            //TO BE COMPLETED -  Watch out! You may need to reset the iterator of the row set.
+
 
             RowSetFactory aFactory = RowSetProvider.newFactory();
             CachedRowSet crs = aFactory.createCachedRowSet();
             crs.populate(rs);  //need to reset the iterator of rs??
-            this.outcome = crs;
-
-            //Clean up
-            //TO BE COMPLETED
+            this.outcome = crs; //now populated
 
             rs.close();
             pstmt.close();
             con.close();
 
-            } catch(Exception e){
-                System.out.println(e);
-            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
-            return flagRequestAttended;
+        return flagRequestAttended;
     }
 
 
