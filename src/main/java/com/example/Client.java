@@ -167,11 +167,10 @@ public class Client extends Application{
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
 
             //TableView outputBox = (TableView) thePrimaryStage.getScene().getRoot(); //error is here
-
             //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
 
             TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
-            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
+            BorderPane borderPane = (BorderPane) primaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
             //Getting the border pane from the stage
             //This will allow us to put the results in there
             TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getCenter();
@@ -306,8 +305,8 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene2 = createScene2(primaryStage);
-                primaryStage.setScene(scene2);
+                //Scene scene2 = createScene2(primaryStage);
+                //primaryStage.setScene(scene2);
                 me.execute();
             }
         });
