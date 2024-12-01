@@ -84,6 +84,11 @@ public class Client extends Application{
                 prep_time = new SimpleStringProperty(this, "");
             return prep_time;
         }
+
+
+
+
+
         public StringProperty cookTimeProperty() {
             if (cook_time == null)
                 cook_time = new SimpleStringProperty(this, "");

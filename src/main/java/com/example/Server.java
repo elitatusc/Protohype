@@ -27,7 +27,8 @@ public class Server {
             //Initialize the socket
 
             //TO BE COMPLETED
-
+            H2Setup h2Setup = new H2Setup();
+            h2Setup.initialise();
             int maxConnectionQueue = 3;
             serverSocket = new ServerSocket(thePort, maxConnectionQueue, InetAddress.getByName(theIPAddress));
             //serverSocket = new ServerSocket(thePort);
