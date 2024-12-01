@@ -105,6 +105,7 @@ public class Client extends Application{
         //TO BE COMPLETED
         try {
             clientSocket = new Socket(Credentials.HOST, Credentials.PORT);
+            System.out.println("connected correctly");
         }catch(UnknownHostException e){
             System.out.println("Client: Unknown host. " + e);
         }catch(IOException e){

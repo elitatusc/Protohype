@@ -15,7 +15,7 @@ import javax.sql.rowset.*;
 public class Service extends Thread{
 
     private Socket serviceSocket = null;
-    private String[] requestStr = new String[2];
+    private String[] requestStr = new String[4];
     private ResultSet outcome = null;
 
     //JDBC connection
@@ -43,8 +43,7 @@ public class Service extends Thread{
 
 
     //Parse the request command and execute the query
-    public boolean attendRequest()
-    {
+    public boolean attendRequest() {
         boolean flagRequestAttended = true;
 
         this.outcome = null;
@@ -76,6 +75,7 @@ public class Service extends Thread{
 
             //Make the query
             //TO BE COMPLETED
+            System.out.println("hello i'm here");
             PreparedStatement pstmt = con.prepareStatement(sql);
 
             //edit this
@@ -85,14 +85,17 @@ public class Service extends Thread{
             //this gets sent to the client to be printed on the UI
             pstmt.setString(1, this.requestStr[0]); //recipe name
             pstmt.setString(2, this.requestStr[1]); //prep time
-            pstmt.setString(2, this.requestStr[2]); //cook time
-            pstmt.setString(2, this.requestStr[3]); //difficulty
+            pstmt.setString(3, this.requestStr[2]); //cook time
+            pstmt.setString(4, this.requestStr[3]); //difficulty
 
-
+            System.out.println("and here");
             ResultSet rs = pstmt.executeQuery();
 
-            //Process query
-            //TO BE COMPLETED -  Watch out! You may need to reset the iterator of the row set.
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            System.out.println("Number of columns: " + columnCount);
+                //Process query
+                //TO BE COMPLETED -  Watch out! You may need to reset the iterator of the row set.
 
             RowSetFactory aFactory = RowSetProvider.newFactory();
             CachedRowSet crs = aFactory.createCachedRowSet();
@@ -106,11 +109,11 @@ public class Service extends Thread{
             pstmt.close();
             con.close();
 
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+            } catch(Exception e){
+                System.out.println(e);
+            }
 
-        return flagRequestAttended;
+            return flagRequestAttended;
     }
 
 
