@@ -4,10 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="430cb9ac-4d1b-47fa-ba25-17d735f4f2a3" name="Changes" comment="deleted idea folder">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/Client.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/Credentials.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/Credentials.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/Service.java" afterDir="false" />
+    <list default="true" id="430cb9ac-4d1b-47fa-ba25-17d735f4f2a3" name="Changes" comment="edit the SQL query in service to change to lowercase &#10;removed the pstmt.setStrings in service as they are not needed &#10;updated the url Credentials in to the correct database name &#10;changed handle in client scene1 to call execute function">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Client$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Client$2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Client$3.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Client$RecipeTable.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Client.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Credentials.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Main.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Server.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/Service.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/db/changelog/db.changelog-master.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,6 +92,7 @@
       <workItem from="1732630155163" duration="20286000" />
       <workItem from="1732987045740" duration="36000" />
       <workItem from="1732987094226" duration="4308000" />
+      <workItem from="1733010589906" duration="767000" />
     </task>
     <task id="LOCAL-00001" summary="editing string">
       <option name="closed" value="true" />
@@ -309,7 +318,31 @@
       <option name="project" value="LOCAL" />
       <updated>1732986622389</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="edit the SQL query in service to change to lowercase &#10;removed the pstmt.setStrings in service as they are not needed &#10;updated the url Credentials in to the correct database name &#10;changed handle in client scene1 to call execute function">
+      <option name="closed" value="true" />
+      <created>1733010695144</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1733010695144</updated>
+    </task>
+    <task id="LOCAL-00030" summary="edit the SQL query in service to change to lowercase &#10;removed the pstmt.setStrings in service as they are not needed &#10;updated the url Credentials in to the correct database name &#10;changed handle in client scene1 to call execute function">
+      <option name="closed" value="true" />
+      <created>1733010723299</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1733010723299</updated>
+    </task>
+    <task id="LOCAL-00031" summary="edit the SQL query in service to change to lowercase &#10;removed the pstmt.setStrings in service as they are not needed &#10;updated the url Credentials in to the correct database name &#10;changed handle in client scene1 to call execute function">
+      <option name="closed" value="true" />
+      <created>1733010886519</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1733010886519</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -336,17 +369,7 @@
     <MESSAGE value="changed line 229 handle function to call me.execute() instead of requestService()" />
     <MESSAGE value="deleted target folder" />
     <MESSAGE value="deleted idea folder" />
-    <option name="LAST_COMMIT_MESSAGE" value="deleted idea folder" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/com/example/Client.java</url>
-          <line>239</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="edit the SQL query in service to change to lowercase &#10;removed the pstmt.setStrings in service as they are not needed &#10;updated the url Credentials in to the correct database name &#10;changed handle in client scene1 to call execute function" />
+    <option name="LAST_COMMIT_MESSAGE" value="edit the SQL query in service to change to lowercase &#10;removed the pstmt.setStrings in service as they are not needed &#10;updated the url Credentials in to the correct database name &#10;changed handle in client scene1 to call execute function" />
   </component>
 </project>
