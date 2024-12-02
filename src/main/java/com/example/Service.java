@@ -12,10 +12,10 @@ import java.net.Socket;
 import java.sql.*;
 import javax.sql.rowset.*;
 
-public class Service extends Thread{
+public class Service extends Thread {
 
     private Socket serviceSocket = null;
-    private String[] requestStr = new String[2];
+    private String[] requestStr = new String[1];
     private ResultSet outcome = null;
 
     //JDBC connection
@@ -34,19 +34,46 @@ public class Service extends Thread{
 
 
     //Retrieve the request from the socket
-//    public String[] retrieveRequest() {
-//        //NEED TO WRITE
-//        //when the button is pressed, we then attend to the request
-//        return null;
-//
-//    }
+    public String[] retrieveRequest() {
+        //NEED TO WRITE
+        //when the button is pressed, we then attend to the request
 
+        this.requestStr[0] = "";
 
-    //Parse the request command and execute the query
+        String tmp = "";
+        try {
+            //TO BE COMPLETED
+            InputStream socketStream = this.serviceSocket.getInputStream();
+            InputStreamReader socketReader = new InputStreamReader(socketStream);
+            StringBuffer stringBuffer = new StringBuffer();
+
+            //String receivedLine = socketReader.read();
+            char y;
+            while(true){
+                y = (char) socketReader.read();
+                if (y == '#'){
+                    break;
+                }
+                stringBuffer.append(y);
+            }
+            tmp = stringBuffer.toString();
+
+            if ("generate".equals(tmp)) {
+                this.requestStr[0] = tmp;
+            } else {
+                throw new IOException("Socket did not connect properly to Server.");
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return this.requestStr;
+    }
+
+        //Parse the request command and execute the query
     public boolean attendRequest()
     {
         boolean flagRequestAttended = true;
-
         this.outcome = null;
 
         String sql = "SELECT\n" +
@@ -71,7 +98,7 @@ public class Service extends Thread{
             //TO BE COMPLETED
 
             //Class.forName("org.postgresql.Driver");
-            //DriverManager.registerDriver(new org.postgresql.Driver());
+            DriverManager.registerDriver(new org.postgresql.Driver());
             Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
             //Make the query
@@ -83,10 +110,12 @@ public class Service extends Thread{
 //            pstmt.setString(2, this.requestStr[1]); //city
 
             //this gets sent to the client to be printed on the UI
-            pstmt.setString(1, this.requestStr[0]); //recipe name
-            pstmt.setString(2, this.requestStr[1]); //prep time
-            pstmt.setString(2, this.requestStr[2]); //cook time
-            pstmt.setString(2, this.requestStr[3]); //difficulty
+
+            //don't actually need this as the SQL statement never changes
+//            pstmt.setString(1, this.requestStr[0]); //recipe name
+//            pstmt.setString(2, this.requestStr[1]); //prep time
+//            pstmt.setString(2, this.requestStr[2]); //cook time
+//            pstmt.setString(2, this.requestStr[3]); //difficulty
 
 
             ResultSet rs = pstmt.executeQuery();
@@ -94,13 +123,11 @@ public class Service extends Thread{
             //Process query
             //TO BE COMPLETED -  Watch out! You may need to reset the iterator of the row set.
 
+
             RowSetFactory aFactory = RowSetProvider.newFactory();
             CachedRowSet crs = aFactory.createCachedRowSet();
             crs.populate(rs);  //need to reset the iterator of rs??
-            this.outcome = crs;
-
-            //Clean up
-            //TO BE COMPLETED
+            this.outcome = crs; //now populated
 
             rs.close();
             pstmt.close();
@@ -141,7 +168,7 @@ public class Service extends Thread{
         try {
             System.out.println("\n============================================\n");
             //Retrieve the service request from the socket
-//            this.retrieveRequest();
+            this.retrieveRequest();
 //            System.out.println("Service thread " + this.getId() + ": Request retrieved: "
 //                    + "artist->" + this.requestStr[0] + "; recordshop->" + this.requestStr[1]);
 
