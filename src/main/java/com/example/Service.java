@@ -79,15 +79,15 @@ public class Service extends Thread {
         boolean flagRequestAttended = true;
         try {
             this.outcome = database.attendRequest();
-            while(this.outcome.next()) {
-
-                String recipe_nme = outcome.getString("recipe_name");
-                String prep_time = outcome.getString("prep_time");
-                String cook_time = outcome.getString("cook_time");
-                String difficulty_level = outcome.getString("difficulty_level");
-
-                System.out.println(recipe_nme + " " + prep_time + " " + cook_time + " " +difficulty_level);
-            }
+//            while(this.outcome.next()) {
+//
+//                String recipe_name = outcome.getString("recipe_name");
+//                String prep_time = outcome.getString("prep_time");
+//                String cook_time = outcome.getString("cook_time");
+//                String difficulty_level = outcome.getString("difficulty_level");
+//
+//                System.out.println(recipe_name + " " + prep_time + " " + cook_time + " " +difficulty_level);
+//            }
         }catch (Exception e){
             System.out.println(e);
             flagRequestAttended = false;
@@ -102,7 +102,16 @@ public class Service extends Thread {
     public void returnServiceOutcome() { //MIGHT NEED TO CHANGED
         try {
             //Return outcome
+            while(this.outcome.next()) {
 
+                String recipe_name = outcome.getString("recipe_name");
+                String prep_time = outcome.getString("prep_time");
+                String cook_time = outcome.getString("cook_time");
+                String difficulty_level = outcome.getString("difficulty_level");
+
+                System.out.println(recipe_name + " " + prep_time + " " + cook_time + " " +difficulty_level);
+            }
+            this.outcome.beforeFirst();
             OutputStream outcomeStream = this.serviceSocket.getOutputStream();
             ObjectOutputStream outcomeStreamWriter = new ObjectOutputStream(outcomeStream);
             outcomeStreamWriter.writeObject(this.outcome); //not sure if this.outcome is correct
@@ -114,7 +123,7 @@ public class Service extends Thread {
 
             this.serviceSocket.close();
 
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             System.out.println("Service thread " + this.getId() + ": " + e);
         }
     }
