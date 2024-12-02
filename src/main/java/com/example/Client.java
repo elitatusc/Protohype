@@ -84,6 +84,11 @@ public class Client extends Application{
                 prep_time = new SimpleStringProperty(this, "");
             return prep_time;
         }
+
+
+
+
+
         public StringProperty cookTimeProperty() {
             if (cook_time == null)
                 cook_time = new SimpleStringProperty(this, "");
@@ -167,11 +172,10 @@ public class Client extends Application{
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
 
             //TableView outputBox = (TableView) thePrimaryStage.getScene().getRoot(); //error is here
-
             //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
 
             TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
-            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
+            BorderPane borderPane = (BorderPane) primaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
             //Getting the border pane from the stage
             //This will allow us to put the results in there
             if (borderPane.getRight() != null) {
