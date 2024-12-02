@@ -38,6 +38,7 @@ public class H2DatabaseImpl implements DatabaseImpl{
         RowSetFactory aFactory = RowSetProvider.newFactory();
         CachedRowSet crs = aFactory.createCachedRowSet();
         crs.populate(rs);  //need to reset the iterator of rs??
+        crs.beforeFirst();
         this.outcome = crs; //now populated
 
         rs.close();
