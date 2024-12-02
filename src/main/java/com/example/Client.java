@@ -206,13 +206,13 @@ public class Client extends Application{
             System.out.println("Client: I/O error. " + e);
         }catch(ClassNotFoundException e){
             System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
-        }catch(SQLException e){
+        }catch(SQLException e){ //gets here
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
         }
     }
 
     public void reportServiceOutcomeInstructions() {
-        try {
+        //try {
 
             /*BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
 
@@ -257,8 +257,8 @@ public class Client extends Application{
         }catch(SQLException e){
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
         } */
-        }
-    }
+       // }
+   }
 
 
 
@@ -287,6 +287,7 @@ public class Client extends Application{
             System.out.println("Client: Exception " + e);
         }
     }
+
     private Scene scene1;
     private Scene scene2;
 
@@ -315,9 +316,9 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene2 = createScene2();
-                primaryStage.setScene(scene2);
-                //me.execute();
+                //Scene scene2 = createScene2();
+                //primaryStage.setScene(scene2);
+                me.execute();
             }
         });
         generate.setStyle("-fx-font-size: 14px;");
