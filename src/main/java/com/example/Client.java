@@ -18,6 +18,7 @@ import java.io.ObjectInputStream;
 import java.sql.*;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetProvider;
 
 
 import javafx.application.Application;
@@ -158,47 +159,57 @@ public class Client extends Application{
             System.exit(1);
         }
 
-        //should happen when button is pressed
-        //Service serv = new Service(clientSocket); //idk if this is client socket or not lol
-        //serv.start();
-        //serv.run();//maybe dont need this?
-        //should actually call run in Service, because run calls attendRequest
     }
 
     public void reportServiceOutcomeRecipes() {
         try {
-            InputStream outcomeStream = clientSocket.getInputStream();
+            InputStream outcomeStream = this.clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
-            serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
-
+            ResultSet temporary = (ResultSet) outcomeStreamReader.readObject();
+            System.out.println("Debug 1");
             //TableView outputBox = (TableView) thePrimaryStage.getScene().getRoot(); //error is here
             //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
 
-            TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
-            BorderPane borderPane = (BorderPane) primaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
+            this.serviceOutcome = RowSetProvider.newFactory().createCachedRowSet();
+            this.serviceOutcome.populate(temporary);
+
+
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
+            System.out.println("Debug 2");
             //Getting the border pane from the stage
             //This will allow us to put the results in there
-            if (borderPane.getRight() != null) {
-                TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getRight();
+            TableView<RecipeTable> outputTable = (TableView<RecipeTable>) borderPane.getCenter();
+            if (outputTable == null) {
+
+                outputTable = new TableView<>();
+                borderPane.setCenter(outputTable);
             }
             //Accessing the table that is in the centre of the borderPane
-
+            System.out.println("Debug 3");
             ObservableList<RecipeTable> tmpRecipes = outputTable.getItems();
             tmpRecipes.clear();
+            System.out.println("Debug 4");
+
+            if (serviceOutcome == null) {
+                System.out.println("No data available.");
+            }
+
             while (this.serviceOutcome.next()) {
+                System.out.println("Row Found");
                 RecipeTable recipe = new RecipeTable();
-                recipe.setRecipeName(serviceOutcome.getString("Recipe Name"));
-                recipe.setPrepTime(serviceOutcome.getString("Prep Time"));
-                recipe.setCookTime(serviceOutcome.getString("Cook Time"));
-                recipe.setTotalTime(serviceOutcome.getString("Total Time"));
-                recipe.setDifficulty(serviceOutcome.getString("Difficulty"));
+                recipe.setRecipeName(serviceOutcome.getString("recipe_name"));
+                recipe.setPrepTime(serviceOutcome.getString("prep_time"));
+                recipe.setCookTime(serviceOutcome.getString("cook_time"));
+                recipe.setDifficulty(serviceOutcome.getString("difficulty_level"));
                 //System.out.println(recipe.getRecipeName() + " | " + recipe.getLabel() + recipe.getGenre() + " | " + recipe.getRrp() + " | " + record.getCopyID());
                 //Can do this later as need to do get methods
 
                 tmpRecipes.add(recipe);
             }
+            this.serviceOutcome.beforeFirst();
+            System.out.println("Debug 5");
             outputTable.setItems(tmpRecipes);
-
+            System.out.println("Debug 6");
 
             String tmp = " ";
             //System.out.println(tmp +"\n====================================\n");
@@ -276,11 +287,10 @@ public class Client extends Application{
             //Request service
             this.requestService();
 
-            //Report user outcome of service
             this.reportServiceOutcomeRecipes();
 
-            //Close the connection with the server
             this.clientSocket.close();
+
 
         }catch(Exception e)
         {// Raised if connection is refused or other technical issue
@@ -291,11 +301,11 @@ public class Client extends Application{
     private Scene scene2;
 
     private TableView<RecipeTable> recipeTable;
-    private Stage primaryStage;
+    private Stage thePrimaryStageprimaryStage;
     @Override
     public void start(Stage primaryStage) {
         // Create Scene 1 and Scene 2
-        this.primaryStage = primaryStage;
+        thePrimaryStage = primaryStage;
         Scene scene1 = createScene1();
 
         // Set the initial scene
@@ -357,7 +367,7 @@ public class Client extends Application{
         total_time.setCellValueFactory(new PropertyValueFactory("Total Time"));
         difficulty.setCellValueFactory(new PropertyValueFactory("Difficulty"));
 
-        recipeTable.setOnMouseClicked(event -> {
+        /*recipeTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {  //if user clicks then event will be triggered
                 RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
                 if (selectedRecipe != null) {
@@ -366,7 +376,7 @@ public class Client extends Application{
 
                 }
             }
-        });
+        });*/
 
         borderPane.setTop(buttonsBox);   // Top section for the button
         borderPane.setCenter(recipeTable);
@@ -387,7 +397,7 @@ public class Client extends Application{
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                primaryStage.setScene(createScene1());
+                thePrimaryStage.setScene(createScene1());
             }
         });
         //labelBox.getChildren().add(back);
