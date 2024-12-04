@@ -212,7 +212,7 @@ public class Client extends Application{
     }
 
     public void reportServiceOutcomeInstructions() {
-        try {
+        //try {
 
             /*BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
 
@@ -257,7 +257,7 @@ public class Client extends Application{
         }catch(SQLException e){
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
         } */
-        }
+
     }
 
 
@@ -315,9 +315,9 @@ public class Client extends Application{
         generate.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                Scene scene2 = createScene2();
-                primaryStage.setScene(scene2);
-                //me.execute();
+                //Scene scene2 = createScene2();
+                //primaryStage.setScene(scene2);
+                me.execute();
             }
         });
         generate.setStyle("-fx-font-size: 14px;");
