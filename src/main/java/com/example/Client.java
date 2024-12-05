@@ -68,6 +68,7 @@ public class Client extends Application{
         public void setInstructions(String value) { instructionsProperty().set(value); }
         public void setQuantity(String value) { quantityProperty().set(value); }
         public void setQuantityUnit(String value) { quantityUnitProperty().set(value); }
+        public void setTotalTime(String value) { totalTimeProperty().set(value); }
 
         public StringProperty getName() {
             return recipeName;
