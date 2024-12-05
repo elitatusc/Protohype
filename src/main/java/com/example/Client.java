@@ -426,6 +426,7 @@ public class Client extends Application{
         recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
 
 
+        //need to edit these so they fit correctly and fill whole page
         ObservableList<TableColumn<RecipeTable,?>> tmp = recipeTable.getColumns();
         tmp.addAll(recipe_name, prep_time, cooking_time, total_time, difficulty);
 
