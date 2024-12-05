@@ -42,6 +42,9 @@ public class Client extends Application{
     private Socket clientSocket = null;
 
     private CachedRowSet serviceOutcome = null; //The service outcome
+    private Label recipeName;
+    private TextArea timeInformation;
+
 
 
     //Convenient to populate the TableView
@@ -212,52 +215,47 @@ public class Client extends Application{
     }
 
     public void reportServiceOutcomeInstructions() {
-        //try {
-
-            /*BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+        try {
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
 
             InputStream outcomeStream = clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
-            //The first line of output is the recipe name, so we set this first
-            Label recipeName = new Label();
-            BorderPane topPane = borderPane.getTop();
-            recipeName = topPane.getCenter();
+            serviceOutcome.next();
 
-            TableView<RecipeTable> outputTable = new TableView<RecipeTable>();
-            TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getRight();
+            //This is the recipe name, which we are setting as a label
+            BorderPane topPane = (BorderPane) borderPane.getTop();
+            recipeName = (Label) topPane.getCenter();
+            recipeName.setText(serviceOutcome.getString("recipe_name"));
+            serviceOutcome.next();
+            //We have to set the service outcome at next after every time we read a line
+
+            //Now we will set some other information about the recipe in some labels
+            /*String timeText;
+            timeInformation = (TextArea) topPane.getRight();
+            timeInformation.setText(timeText);*/
+
+            TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
+            //TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getRight();
             //Accessing the ingredient table that is on the right side of the borderPane
-            while (this.serviceOutcome.next()) {
-
-            ObservableList<RecipeTable> tmpInstructions = outputTable.getItems();
+            ObservableList<RecipeTable> tmpInstructions = ingredientsTable.getItems();
             tmpInstructions.clear();
             while (this.serviceOutcome.next()) {
                 RecipeTable recipe = new RecipeTable();
-                recipe.setRecipeName(serviceOutcome.getString("Recipe Name"));
-                recipe.setPrepTime(serviceOutcome.getString("Prep Time"));
-                recipe.setCookTime(serviceOutcome.getString("Cook Time"));
-                recipe.setTotalTime(serviceOutcome.getString("Total Time"));
-                recipe.setDifficulty(serviceOutcome.getString("Difficulty"));
-                recipe.setInstructions(serviceOutcome.getString("Instructions"));
-                recipe.setIngredients(serviceOutcome.getString("Ingredients"));
-                recipe.setQuantity(serviceOutcome.getString("Quantity"));
+                recipe.setIngredients(serviceOutcome.getString("ingredient_name"));
+                recipe.setQuantity(serviceOutcome.getString("quantity"));
                 //Need to have the output be in this specific order or will be wrong
-
                 tmpInstructions.add(recipe);
             }
-            outputTable.setItems(tmpInstructions);
+            ingredientsTable.setItems(tmpInstructions);
 
-
-            String tmp = " ";
-            //System.out.println(tmp +"\n====================================\n");
-        }catch(IOException e){
+        } catch(IOException e){
             System.out.println("Client: I/O error. " + e);
-        }catch(ClassNotFoundException e){
+        } catch(ClassNotFoundException e){
             System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
-        }catch(SQLException e){
+        } catch(SQLException e){
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
-        } */
-
+        }
     }
 
 
@@ -363,18 +361,18 @@ public class Client extends Application{
         total_time.setCellValueFactory(new PropertyValueFactory("totalTime"));
         difficulty.setCellValueFactory(new PropertyValueFactory("difficulty"));
 
-//        recipeTable.setOnMouseClicked(event -> {
-//            if (event.getClickCount() == 1) {  //if user clicks then event will be triggered
-//                RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
-//                if (selectedRecipe != null) {
-//                    // Switch to Scene 2 when a row is clicked
-//                    theSecondaryStage = secondaryStage;
-//                    secondaryStage.setTitle("Recipe");
-//                    secondaryStage.setScene(createScene2());
-//
-//                }
-//            }
-//        });
+        recipeTable.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 1) {  //if user clicks then event will be triggered
+                RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
+                if (selectedRecipe != null) {
+                    // Switch to Scene 2 when a row is clicked
+                    Scene myScene = createScene1();
+                    thePrimaryStage.setScene(createScene2());
+
+
+                }
+            }
+        });
 
         ObservableList<TableColumn<RecipeTable,?>> tmp = recipeTable.getColumns();
         tmp.addAll(recipe_name, prep_time, cooking_time, total_time, difficulty);
@@ -402,18 +400,18 @@ public class Client extends Application{
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                //thePrimaryStage.setScene(createScene1());
+                thePrimaryStage.setScene(createScene1());
             }
         });
         //labelBox.getChildren().add(back);
         back.setStyle("-fx-font-size: 14px;");
         topPane.setLeft(back);
-        Label temp = new Label("         ");
-        topPane.setRight(temp);
+        Label positioning = new Label("         ");
+        topPane.setRight(positioning);
         //This label is only here to try and fix the positioning of the recipeName label
 
         //Adding the recipe name to the top of the scene
-        Label recipeName = new Label("Temp label");
+        Label recipeName = new Label();
         //labelBox.getChildren().add(recipeName);
         //HBox.setHgrow(recipeName, javafx.scene.layout.Priority.ALWAYS);
         //labelBox.setAlignment(Pos.CENTER);
