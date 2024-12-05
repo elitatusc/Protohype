@@ -192,12 +192,16 @@ public class Client extends Application{
                 recipe.setRecipeName(serviceOutcome.getString("recipe_name"));
                 recipe.setPrepTime(serviceOutcome.getString("prep_time"));
                 recipe.setCookTime(serviceOutcome.getString("cook_time"));
+                int total = Integer.parseInt(serviceOutcome.getString("prep_time")) + Integer.parseInt(serviceOutcome.getString("cook_time"));
+                String total_time = String.valueOf(total);
+                recipe.setTotalTime(total_time);
                 recipe.setDifficulty(serviceOutcome.getString("difficulty_level"));
                 //System.out.println(recipe.getRecipeName() + " | " + recipe.getLabel() + recipe.getGenre() + " | " + recipe.getRrp() + " | " + record.getCopyID());
                 //Can do this later as need to do get methods
 
                 tmpRecipes.add(recipe);
             }
+
             this.serviceOutcome.beforeFirst();
             System.out.println("Debug 5");
             outputTable.setItems(tmpRecipes);
