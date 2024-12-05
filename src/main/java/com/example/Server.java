@@ -44,7 +44,6 @@ public class Server {
 
 
 
-
     //Runs the service loop
     public void executeServiceLoop()
     {

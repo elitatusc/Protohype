@@ -57,16 +57,21 @@ public class Client extends Application{
         private StringProperty ingredients;
         private StringProperty instructions;
         private StringProperty quantity;
+        private StringProperty quantityUnit;
 
 
         public void setRecipeName(String value) { recipeNameProperty().set(value); }
         public void setPrepTime(String value) { prepTimeProperty().set(value); }
         public void setCookTime(String value) { cookTimeProperty().set(value); }
-        public void setTotalTime(String value) { totalTimeProperty().set(value); }
         public void setDifficulty(String value) { difficultyProperty().set(value); }
         public void setIngredients(String value) { ingredientsProperty().set(value); }
         public void setInstructions(String value) { instructionsProperty().set(value); }
         public void setQuantity(String value) { quantityProperty().set(value); }
+        public void setQuantityUnit(String value) { quantityUnitProperty().set(value); }
+
+        public StringProperty getName() {
+            return recipeName;
+        }
 
 
 
@@ -80,8 +85,6 @@ public class Client extends Application{
                 prepTime = new SimpleStringProperty(this, "");
             return prepTime;
         }
-
-
         public StringProperty cookTimeProperty() {
             if (cookTime == null)
                 cookTime = new SimpleStringProperty(this, "");
@@ -111,6 +114,11 @@ public class Client extends Application{
             if (quantity == null)
                 quantity = new SimpleStringProperty(this, "");
             return quantity;
+        }
+        public StringProperty quantityUnitProperty() {
+            if (quantityUnit == null)
+                quantityUnit = new SimpleStringProperty(this, "");
+            return quantityUnit;
         }
 
     }
@@ -217,7 +225,6 @@ public class Client extends Application{
     public void reportServiceOutcomeInstructions() {
         try {
             BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
-
             InputStream outcomeStream = clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
@@ -230,23 +237,59 @@ public class Client extends Application{
             serviceOutcome.next();
             //We have to set the service outcome at next after every time we read a line
 
-            //Now we will set some other information about the recipe in some labels
-            /*String timeText;
+            //Now we will put the information about the recipe times in the text area
+            StringBuilder timesBuilder = new StringBuilder();
+            //Iterating through to get the different lines from the input
+            String prepTime = serviceOutcome.getString("prepTime");
+            timesBuilder.append("Prep Time: ").append(prepTime).append(" minutes\n");
+            serviceOutcome.next();
+            String cookingTime = serviceOutcome.getString("cookingTime");
+            timesBuilder.append("Cooking Time: ").append(cookingTime).append(" minutes\n");
+            serviceOutcome.next();
+            timesBuilder.append(serviceOutcome.getString("difficultyLevel")).append("\n");
+            serviceOutcome.next();
+            //Calculating the totalTime from the 2 times
+            int cookingTemp = Integer.parseInt(cookingTime);
+            int prepTemp = Integer.parseInt(prepTime);
+            int totalTime = prepTemp + cookingTemp;
+            timesBuilder.append("Total Time: ").append(totalTime).append(" minutes\n");
+            timesBuilder.append("Difficulty Level: ").append(serviceOutcome.getString("difficultyLevel")).append("\n");
+            //This is where we will put the information about times and difficulty
+            String timeText = timesBuilder.toString();
             timeInformation = (TextArea) topPane.getRight();
-            timeInformation.setText(timeText);*/
+            timeInformation.setText(timeText);
 
-            TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
-            //TableView<RecipeTable> outputBox = (TableView<RecipeTable>) borderPane.getRight();
+            //Now we will get the instructions and put them in another text field
+            TextArea instructionsText = (TextArea) borderPane.getCenter();
+            instructionsText.setText(serviceOutcome.getString("instructions"));
+
+        } catch(IOException e){
+            System.out.println("Client: I/O error. " + e);
+        } catch(ClassNotFoundException e){
+            System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
+        } catch(SQLException e){
+            System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
+        }
+    }
+
+    public void reportServiceOutcomeIngredients() {
+        try {
+            //Here we get and show the ingredients information for each recipe selected
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+            InputStream outcomeStream = clientSocket.getInputStream();
+            ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
+            serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
+            serviceOutcome.next();
+
+            TableView<RecipeTable> ingredientsTable = (TableView<RecipeTable>) borderPane.getRight();
             //Accessing the ingredient table that is on the right side of the borderPane
             ObservableList<RecipeTable> tmpInstructions = ingredientsTable.getItems();
             tmpInstructions.clear();
-            while (this.serviceOutcome.next()) {
-                RecipeTable recipe = new RecipeTable();
-                recipe.setIngredients(serviceOutcome.getString("ingredient_name"));
-                recipe.setQuantity(serviceOutcome.getString("quantity"));
-                //Need to have the output be in this specific order or will be wrong
-                tmpInstructions.add(recipe);
-            }
+            RecipeTable recipe = new RecipeTable();
+            recipe.setIngredients(serviceOutcome.getString("ingredient_name"));
+            recipe.setQuantity(serviceOutcome.getString("quantity"));
+            recipe.setQuantityUnit(serviceOutcome.getString("quantity_unit"));
+            tmpInstructions.add(recipe);
             ingredientsTable.setItems(tmpInstructions);
 
         } catch(IOException e){
@@ -257,6 +300,7 @@ public class Client extends Application{
             System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
         }
     }
+
 
 
 
@@ -293,7 +337,6 @@ public class Client extends Application{
     @Override
     public void start(Stage primaryStage) {
         // Create Scene 1 and Scene 2
-        //thePrimaryStage = primaryStage;
         Scene scene1 = createScene1();
 
         // Set the initial scene
@@ -346,9 +389,9 @@ public class Client extends Application{
         buttonsBox.getChildren().add(filter);
         filter.setStyle("-fx-font-size: 14px;");
 
-
+        TableView<RecipeTable> recipeTable = new TableView<>();
+        recipeTable.setEditable(true);
         //This is the output table where all the recipes will be listed
-        TableView<RecipeTable> recipeTable = new TableView<RecipeTable>();
         TableColumn<RecipeTable,String> recipe_name = new TableColumn<RecipeTable,String>("Recipe Name");
         TableColumn<RecipeTable,String> prep_time = new TableColumn<RecipeTable,String>("Prep Time");
         TableColumn<RecipeTable,String> cooking_time = new TableColumn<RecipeTable,String>("Cook Time");
@@ -361,24 +404,25 @@ public class Client extends Application{
         total_time.setCellValueFactory(new PropertyValueFactory("totalTime"));
         difficulty.setCellValueFactory(new PropertyValueFactory("difficulty"));
 
+
         recipeTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 1) {  //if user clicks then event will be triggered
                 RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
                 if (selectedRecipe != null) {
                     // Switch to Scene 2 when a row is clicked
                     Scene myScene = createScene1();
+                    System.out.println("Selected Recipe: " + selectedRecipe.getName());
                     thePrimaryStage.setScene(createScene2());
-
-
                 }
             }
         });
+        //This binds the widths of the table to the border pane width and height meaning that the table will fill out the whole space
+        recipeTable.prefWidthProperty().bind(borderPane.widthProperty());
+        recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
+
 
         ObservableList<TableColumn<RecipeTable,?>> tmp = recipeTable.getColumns();
         tmp.addAll(recipe_name, prep_time, cooking_time, total_time, difficulty);
-
-        //GridPane.setConstraints(recipeTable, 0, 3, 2, 1);
-        //buttonsBox.getChildren().add(recipeTable);
 
         borderPane.setTop(buttonsBox);   // Top section for the button
         borderPane.setCenter(recipeTable);
@@ -403,38 +447,45 @@ public class Client extends Application{
                 thePrimaryStage.setScene(createScene1());
             }
         });
-        //labelBox.getChildren().add(back);
         back.setStyle("-fx-font-size: 14px;");
         topPane.setLeft(back);
+
         Label positioning = new Label("         ");
         topPane.setRight(positioning);
         //This label is only here to try and fix the positioning of the recipeName label
 
         //Adding the recipe name to the top of the scene
         Label recipeName = new Label();
-        //labelBox.getChildren().add(recipeName);
-        //HBox.setHgrow(recipeName, javafx.scene.layout.Priority.ALWAYS);
-        //labelBox.setAlignment(Pos.CENTER);
         topPane.setCenter(recipeName);
         recipeName.setStyle("-fx-font-size: 18px;");
 
         Label ingredientsLabel = new Label("Ingredients");
         ingredientsLabel.setStyle("-fx-font-size: 16px;");
 
+        //Now we will make the text area for the time and difficulty information
+        TextArea timeInformation = new TextArea();
+        timeInformation.setText("Testing Times");
+        timeInformation.setWrapText(true); //Setting this to true allows the text to show if its too long
+        topPane.setRight(timeInformation);
+
+        //Now we will make the text area for the ingredients
+        TextArea instructions = new TextArea();
+        instructions.setText("Testing instructions");
+        instructions.setWrapText(true);
+        borderPane.setCenter(instructions);
+
         //Making the table where the ingredients and quantities will go
         TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
         TableColumn<RecipeTable,String> ingredient_name = new TableColumn<RecipeTable,String>("Ingredient");
         TableColumn<RecipeTable,String> quantity_needed = new TableColumn<RecipeTable,String>("Quantity");
+        TableColumn<RecipeTable,String> quantity_unit = new TableColumn<RecipeTable,String>("Quantity Unit");
         rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
 
         ingredient_name.setCellValueFactory(new PropertyValueFactory("Ingredient"));
         quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
+        quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
         borderPane.setRight(rightPane);
         //Will go on the right hand side of the screen
-
-        TextArea instructionsText = new TextArea();
-        instructionsText.setText("This is where the instructions go");
-        borderPane.setCenter(instructionsText);
 
         borderPane.setTop(topPane);
 
