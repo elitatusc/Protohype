@@ -87,9 +87,6 @@ public class Client extends Application{
         }
 
 
-
-
-
         public StringProperty cookTimeProperty() {
             if (cook_time == null)
                 cook_time = new SimpleStringProperty(this, "");
@@ -274,11 +271,12 @@ public class Client extends Application{
 
 
     public void execute(){
-//        try {
-//            DriverManager.registerDriver(new org.postgresql.Driver());
-//        }catch(Exception e){
-//            System.out.println(e);
-//        }
+        //do we need the driver? 4/12/24
+        try {
+            DriverManager.registerDriver(new org.postgresql.Driver());
+        }catch(Exception e){
+            System.out.println(e);
+        }
 
         try{
             //Initializes the socket
@@ -312,6 +310,8 @@ public class Client extends Application{
         primaryStage.setTitle("Recipe Suggestions");
         primaryStage.setScene(scene1);
         primaryStage.show();
+
+
     }
 
     private Scene createScene1() {
@@ -333,6 +333,10 @@ public class Client extends Application{
         generate.setStyle("-fx-font-size: 14px;");
 
         buttonsBox.getChildren().add(generate);
+
+        //added these two lines
+        //Label recipeName = new Label("Recipe name:");
+        //borderPane.getChildren().add(recipeName);
 
         Pane expanding = new Pane();
         buttonsBox.getChildren().add(expanding);
@@ -361,7 +365,7 @@ public class Client extends Application{
         TableColumn<RecipeTable,String> total_time = new TableColumn<RecipeTable,String>("Total Time");
         TableColumn<RecipeTable,String> difficulty = new TableColumn<RecipeTable,String>("Difficulty");
 
-        recipe_name.setCellValueFactory(new PropertyValueFactory("Recipe Name"));
+        recipe_name.setCellValueFactory(new PropertyValueFactory("recipe_name"));
         prep_time.setCellValueFactory(new PropertyValueFactory("Prep Time"));
         cooking_time.setCellValueFactory(new PropertyValueFactory("Cooking Time"));
         total_time.setCellValueFactory(new PropertyValueFactory("Total Time"));
@@ -378,10 +382,17 @@ public class Client extends Application{
             }
         });*/
 
+        ObservableList<TableColumn<RecipeTable,?>> tmp = recipeTable.getColumns();
+        tmp.addAll(recipe_name, prep_time, cooking_time, total_time, difficulty);
+
+        //GridPane.setConstraints(recipeTable, 0, 3, 2, 1);
+        //buttonsBox.getChildren().add(recipeTable);
+
         borderPane.setTop(buttonsBox);   // Top section for the button
         borderPane.setCenter(recipeTable);
 
         return new Scene(borderPane, 800, 600);
+
     }
 
     private Scene createScene2() {
