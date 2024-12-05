@@ -1,10 +1,6 @@
 package com.example;
 
-import java.util.List;
-import java.util.ArrayList;
-
 import java.lang.ClassNotFoundException;
-import java.lang.IndexOutOfBoundsException;
 
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -24,29 +20,25 @@ import javax.sql.rowset.RowSetProvider;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.geometry.Insets;
 import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.ToolBar;
 
 public class Client extends Application{
 
     public static Client me; //Get the application instance in javafx
     public static Stage thePrimaryStage;  //Get the application primary scene in javafx
+
+    //public static Stage theSecondaryStage;
     private Socket clientSocket = null;
 
     private CachedRowSet serviceOutcome = null; //The service outcome
@@ -54,10 +46,10 @@ public class Client extends Application{
 
     //Convenient to populate the TableView
     public class RecipeTable {
-        private StringProperty recipe_name;
-        private StringProperty prep_time;
-        private StringProperty cook_time;
-        private StringProperty total_time;
+        private StringProperty recipeName;
+        private StringProperty prepTime;
+        private StringProperty cookTime;
+        private StringProperty totalTime;
         private StringProperty difficulty;
         private StringProperty ingredients;
         private StringProperty instructions;
@@ -76,26 +68,26 @@ public class Client extends Application{
 
 
         public StringProperty recipeNameProperty() {
-            if (recipe_name == null)
-                recipe_name = new SimpleStringProperty(this, "");
-            return recipe_name;
+            if (recipeName == null)
+                recipeName = new SimpleStringProperty(this, "");
+            return recipeName;
         }
         public StringProperty prepTimeProperty() {
-            if (prep_time == null)
-                prep_time = new SimpleStringProperty(this, "");
-            return prep_time;
+            if (prepTime == null)
+                prepTime = new SimpleStringProperty(this, "");
+            return prepTime;
         }
 
 
         public StringProperty cookTimeProperty() {
-            if (cook_time == null)
-                cook_time = new SimpleStringProperty(this, "");
-            return cook_time;
+            if (cookTime == null)
+                cookTime = new SimpleStringProperty(this, "");
+            return cookTime;
         }
         public StringProperty totalTimeProperty() {
-            if (total_time == null)
-                total_time = new SimpleStringProperty(this, "");
-            return total_time;
+            if (totalTime == null)
+                totalTime = new SimpleStringProperty(this, "");
+            return totalTime;
         }
         public StringProperty difficultyProperty() {
             if (difficulty == null)
@@ -303,14 +295,14 @@ public class Client extends Application{
     @Override
     public void start(Stage primaryStage) {
         // Create Scene 1 and Scene 2
-        thePrimaryStage = primaryStage;
+        //thePrimaryStage = primaryStage;
         Scene scene1 = createScene1();
 
         // Set the initial scene
         primaryStage.setTitle("Recipe Suggestions");
         primaryStage.setScene(scene1);
         primaryStage.show();
-
+        thePrimaryStage = primaryStage;
 
     }
 
@@ -365,22 +357,24 @@ public class Client extends Application{
         TableColumn<RecipeTable,String> total_time = new TableColumn<RecipeTable,String>("Total Time");
         TableColumn<RecipeTable,String> difficulty = new TableColumn<RecipeTable,String>("Difficulty");
 
-        recipe_name.setCellValueFactory(new PropertyValueFactory("recipe_name"));
-        prep_time.setCellValueFactory(new PropertyValueFactory("Prep Time"));
-        cooking_time.setCellValueFactory(new PropertyValueFactory("Cooking Time"));
-        total_time.setCellValueFactory(new PropertyValueFactory("Total Time"));
-        difficulty.setCellValueFactory(new PropertyValueFactory("Difficulty"));
+        recipe_name.setCellValueFactory(new PropertyValueFactory("recipeName"));
+        prep_time.setCellValueFactory(new PropertyValueFactory("prepTime"));
+        cooking_time.setCellValueFactory(new PropertyValueFactory("cookTime"));
+        total_time.setCellValueFactory(new PropertyValueFactory("totalTime"));
+        difficulty.setCellValueFactory(new PropertyValueFactory("difficulty"));
 
-        /*recipeTable.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 1) {  //if user clicks then event will be triggered
-                RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
-                if (selectedRecipe != null) {
-                    // Switch to Scene 2 when a row is clicked
-                    primaryStage.setScene(createScene2());
-
-                }
-            }
-        });*/
+//        recipeTable.setOnMouseClicked(event -> {
+//            if (event.getClickCount() == 1) {  //if user clicks then event will be triggered
+//                RecipeTable selectedRecipe = recipeTable.getSelectionModel().getSelectedItem();
+//                if (selectedRecipe != null) {
+//                    // Switch to Scene 2 when a row is clicked
+//                    theSecondaryStage = secondaryStage;
+//                    secondaryStage.setTitle("Recipe");
+//                    secondaryStage.setScene(createScene2());
+//
+//                }
+//            }
+//        });
 
         ObservableList<TableColumn<RecipeTable,?>> tmp = recipeTable.getColumns();
         tmp.addAll(recipe_name, prep_time, cooking_time, total_time, difficulty);
@@ -408,7 +402,7 @@ public class Client extends Application{
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event){
-                thePrimaryStage.setScene(createScene1());
+                //thePrimaryStage.setScene(createScene1());
             }
         });
         //labelBox.getChildren().add(back);
