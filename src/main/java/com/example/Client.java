@@ -45,6 +45,8 @@ public class Client extends Application{
     private Label recipeName;
     private TextArea timeInformation;
 
+    private String requestedRecipe = null;
+
 
 
     //Convenient to populate the TableView
@@ -160,6 +162,22 @@ public class Client extends Application{
             System.exit(1);
         }
 
+    }
+
+    //this function sends the recipe name that was clicked on to Service so that it can be put into the SQL statement
+
+    public void requestInstructions() {
+        System.out.println("Client: Button pressed. Requesting recipes\n");
+
+        try{
+            OutputStream requestStream = this.clientSocket.getOutputStream();
+            OutputStreamWriter requestStreamWriter = new OutputStreamWriter(requestStream);
+            requestStreamWriter.write( requestedRecipe + "#");
+            requestStreamWriter.flush();
+        }catch(IOException e){
+            System.out.println("Client: I/O error. " + e);
+            System.exit(1);
+        }
     }
 
     public void reportServiceOutcomeRecipes() {
@@ -311,11 +329,11 @@ public class Client extends Application{
 
     public void execute(){
         //do we need the driver? 4/12/24
-        try {
-            DriverManager.registerDriver(new org.postgresql.Driver());
-        }catch(Exception e){
-            System.out.println(e);
-        }
+//        try {
+//            DriverManager.registerDriver(new org.postgresql.Driver());
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
 
         try{
             //Initializes the socket
@@ -325,6 +343,25 @@ public class Client extends Application{
             this.requestService();
 
             this.reportServiceOutcomeRecipes();
+
+            this.clientSocket.close();
+
+
+        }catch(Exception e)
+        {// Raised if connection is refused or other technical issue
+            System.out.println("Client: Exception " + e);
+        }
+    }
+
+    public void getInstructionsExecute(){
+        try{
+            //Initializes the socket
+            this.initializeSocket();
+
+            //Request service
+            this.requestInstructions();
+
+            this.reportServiceOutcomeInstructions();
 
             this.clientSocket.close();
 
