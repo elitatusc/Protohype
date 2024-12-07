@@ -9,7 +9,11 @@ The aim of this application is to make the lives of customers of Student Smart H
 
 ### How to Get Started With the Project
 
+Start by running the server and then run the client. By running these classes the database will automatically load into your device's memory. 
 
+The user interface will appear on your screen. To generate a list of suggested recipes you can press the 'generate recipes' button. A list of the top 5 recipes will then appear on the user interface. 
+
+You can choose to either filter these recipes using the filter button at the top right of the user interface, or click on any of the five recipes to view more information about each of them (e.g. the recipe instructions and necessary ingredients). If you click on one of the suggested recipes, there is a back button at the top left of the user interface so that you can navigate back to the list of suggested recipes. 
 
 ### Who Maintains and Contributes to the Project
 
