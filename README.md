@@ -9,6 +9,7 @@ This application populates a database with information about a student's fridge.
 
 ### Why the Application is Useful
 
+The aim of this application is to make the lives of customers of Student Smart Homes simpler by providing them with an application that can, on demand, suggest recipes for them to make with the ingredients available in their fridge.
 
 ### How Users Can Get Started With the Project
 
