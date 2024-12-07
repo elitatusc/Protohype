@@ -453,7 +453,8 @@ public class Client extends Application{
                 if (selectedRecipe != null) {
                     // Switch to Scene 2 when a row is clicked
                     Scene myScene = createScene1();
-                    System.out.println("Selected Recipe: " + selectedRecipe.getName());
+                    System.out.println("Selected Recipe: " + selectedRecipe.getName().getValue());
+                    this.requestedRecipe = selectedRecipe.getName().getValue();
                     thePrimaryStage.setScene(createScene2());
                 }
             }
