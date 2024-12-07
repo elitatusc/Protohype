@@ -1,11 +1,15 @@
 # Recipe Suggestion Application
 This repopsitory contains the source code for the recipe suggestion application.
 
-### what the project does
+### What the Application Does
 
-### why the project is useful
+This application populates a database with information about a student's fridge. It then uses this information to generate a suggested list of recipes for the student, based on the available ingredients. The user can also filter these recipes.
 
-### how users can get started with the project
+### Why the Application is Useful
 
-### who maintains and contributes to the project 
+### How Users Can Get Started With the Project
+
+### Who Maintains and Contributes to the Project
+
+This project has been created and will be maintained by Jessica Greene, Elita Tuscano and Amelia Williams. 
   
