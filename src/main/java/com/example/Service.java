@@ -330,9 +330,9 @@ public class Service extends Thread {
             //Return outcome
             while(this.secondOutcome.next()) {
                 System.out.println("printing return ingredients");
-                String ingredient_name = secondOutcome.getString("ingredient_name");
-                String quantity_needed = secondOutcome.getString("quantity_needed");
-                String quantity_unit = secondOutcome.getString("quantity_unit");
+                String ingredient_name = secondOutcome.getString("ingredients");
+                String quantity_needed = secondOutcome.getString("quantity");
+                String quantity_unit = secondOutcome.getString("quantityUnit");
                 System.out.println(ingredient_name + " " + quantity_needed + " " + quantity_unit);
 
 
