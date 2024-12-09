@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import java.sql.*;
+import java.util.Collections;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
@@ -32,6 +33,9 @@ import javafx.stage.Stage;
 import javafx.collections.ObservableList;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
+
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 
 public class Client extends Application{
 
@@ -74,6 +78,14 @@ public class Client extends Application{
 
         public StringProperty getName() {
             return recipeName;
+        }
+
+        public StringProperty getTotalTime(){
+            return totalTime;
+        }
+
+        public StringProperty getDifficulty(){
+            return difficulty;
         }
 
 
@@ -380,13 +392,97 @@ public class Client extends Application{
     public void start(Stage primaryStage) {
         // Create Scene 1 and Scene 2
         Scene scene1 = createScene1();
-
         // Set the initial scene
         primaryStage.setTitle("Recipe Suggestions");
         primaryStage.setScene(scene1);
         primaryStage.show();
         thePrimaryStage = primaryStage;
 
+    }
+
+    private void filter(int filter_type){
+        BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+        TableView<RecipeTable> recipeTable = (TableView<RecipeTable>) borderPane.getCenter();
+        if (recipeTable == null) {
+            recipeTable = new TableView<>();
+            borderPane.setCenter(recipeTable);
+            return;
+        }
+        ObservableList<RecipeTable> listOfRecipes = recipeTable.getItems();
+        int length = listOfRecipes.size();
+        if (filter_type == 0 || filter_type == 2){
+            //Filter by time taken (total)
+            for (int i = 0; i < (length-1); i++) {
+                for (int j = 0; j < (length - 1); j++) {
+                    int totalTime1 = Integer.parseInt(listOfRecipes.get(j).getTotalTime().get());
+                    int totalTime2 = Integer.parseInt(listOfRecipes.get(j + 1).getTotalTime().get());
+                    if (totalTime1 > totalTime2) {
+                        RecipeTable temp = listOfRecipes.get(j);
+                        listOfRecipes.set(j, listOfRecipes.get(j + 1));
+                        listOfRecipes.set(j + 1, temp);
+
+                    }
+                }
+            }
+            if (filter_type == 2){
+                Collections.reverse(listOfRecipes);
+            }
+        }
+        else if (filter_type == 1){
+            //Filter alphabetically
+            for (int i = 0; i < (length-1); i++) {
+                for (int j = 0; j < (length - 1); j++) {
+                    String name1 = listOfRecipes.get(j).getName().get();
+                    String name2 = listOfRecipes.get(j+1).getName().get();
+                    if (name1.compareTo(name2) > 0) {
+                        RecipeTable temp = listOfRecipes.get(j);
+                        listOfRecipes.set(j, listOfRecipes.get(j + 1));
+                        listOfRecipes.set(j + 1, temp);
+
+                    }
+                }
+            }
+        }
+        else if (filter_type == 3 || filter_type == 4){
+            for (int i = 0; i < (length-1); i++) {
+                for (int j = 0; j < (length - 1); j++) {
+                    int difficulty1 = getDifficulty(listOfRecipes.get(j).getDifficulty().get());
+                    int difficulty2 = getDifficulty(listOfRecipes.get(j+1).getDifficulty().get());
+                    if (difficulty1 > difficulty2){
+                        RecipeTable temp = listOfRecipes.get(j);
+                        listOfRecipes.set(j, listOfRecipes.get(j + 1));
+                        listOfRecipes.set(j + 1, temp);
+                    }
+                }
+            }
+            if (filter_type == 4){
+                Collections.reverse(listOfRecipes);
+            }
+            for (RecipeTable recipe: listOfRecipes){
+                System.out.println(recipe.getName().get());
+            }
+        }
+
+        TableView<RecipeTable> outputFilteredTable = (TableView<RecipeTable>) borderPane.getCenter();
+        if (outputFilteredTable == null) {
+            outputFilteredTable = new TableView<>();
+            borderPane.setCenter(outputFilteredTable);
+        }
+        outputFilteredTable.setItems(listOfRecipes);
+    }
+
+    private int getDifficulty(String difficulty){
+        int difficultyNumber = 0;
+        if (difficulty.equals("easy")){
+            difficultyNumber = 1;
+        }
+        else if (difficulty.equals("medium")){
+            difficultyNumber = 2;
+        }
+        else if (difficulty.equals("hard")){
+            difficultyNumber = 3;
+        }
+        return difficultyNumber;
     }
 
     private Scene createScene1() {
@@ -418,18 +514,39 @@ public class Client extends Application{
         HBox.setHgrow(expanding, Priority.ALWAYS);
         expanding.setMaxWidth(Double.MAX_VALUE);
 
-        //This is the filter button in the top right of the grid pane
-        Button filter = new Button();
-        filter.setText("Filter Recipes");
-        filter.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //filterRecipes();
-                //Make the filter recipes function
-            }
-        });
-        buttonsBox.getChildren().add(filter);
+        //This is a filter button that, when pressed, will produce a number of options
+        MenuButton filter = new MenuButton("Filter by");
+        MenuItem byName = new MenuItem("Alphabetically");
+        MenuItem byTotalTimeLow = new MenuItem("Time (low to high)");
+        MenuItem byTotalTimeHigh = new MenuItem("Time (high to low)");
+        MenuItem byDifficultyLow = new MenuItem("Difficulty (low to high)");
+        MenuItem byDifficultyHigh = new MenuItem("Difficulty (high to low)");
+
+        byTotalTimeLow.setOnAction(event -> filter(0));
+        byTotalTimeHigh.setOnAction(event -> filter(2));
+        byName.setOnAction(event -> filter(1));
+        byDifficultyLow.setOnAction(event -> filter(3));
+        byDifficultyHigh.setOnAction(event -> filter(4));
         filter.setStyle("-fx-font-size: 14px;");
+        filter.getItems().addAll(byName, byTotalTimeLow, byTotalTimeHigh, byDifficultyLow, byDifficultyHigh);
+        //This is adding the menu options to the actual menu button
+        buttonsBox.getChildren().add(filter);
+
+
+
+
+        //This is the filter button in the top right of the grid pane
+//        Button filter = new Button();
+//        filter.setText("Filter Recipes");
+//        filter.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                //filterRecipes();
+//                //Make the filter recipes function
+//            }
+//        });
+//        buttonsBox.getChildren().add(filter);
+//        filter.setStyle("-fx-font-size: 14px;");
 
         TableView<RecipeTable> recipeTable = new TableView<>();
         recipeTable.setEditable(true);
