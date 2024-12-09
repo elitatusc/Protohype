@@ -18,6 +18,8 @@ public class Service extends Thread {
     private Socket serviceSocket = null;
     private String[] requestStr = new String[1];
     private ResultSet outcome = null;
+
+    private ResultSet returning_ingredients = null;
     private ResultSet secondOutcome = null;
 
 
@@ -92,7 +94,7 @@ public class Service extends Thread {
             }
             else{
                 //need to make this an array too
-                this.outcome = attendInstructions(); //is null
+                this.returning_ingredients = attendInstructions(); //is null
                 this.secondOutcome = attendIngredients();
             }
 
@@ -122,86 +124,21 @@ public class Service extends Thread {
         String sql1 = "SELECT r.recipe_name,r.prep_time,r.cook_time,r.difficulty_level, r.instructions\n" +
                 "FROM recipes r WHERE recipe_name = ?; \n";
 
-//        String sql2 = "SELECT i.ingredient_name, ri.quantity_needed, ri.quantity_unit\n" +
-//                "FROM recipe_ingredients ri \n" +
-//                "LEFT JOIN recipes r ON ri.recipe_id = r.recipe_id\n" +
-//                "LEFT JOIN ingredients i ON i.ingredient_id = ri.ingredient_id\n" +
-//                "WHERE r.recipe_id = (\n" +
-//                "    SELECT recipe_id \n" +
-//                "    FROM recipes\n" +
-//                "    WHERE recipe_name = ?\n" +
-//                ");\n";
-
         Connection connection = DriverManager.getConnection(jdbcURL);
         PreparedStatement pstmt = connection.prepareStatement(sql1);
-//        PreparedStatement prepSts = connection.prepareStatement(sql2);
         pstmt.setString(1, this.requestStr[0]);
-//        prepSts.setString(1, this.requestStr[0]);
         ResultSet rs = pstmt.executeQuery();
-//        while(rs.next()){
-//            System.out.println(rs.getString(1));
-//            System.out.println(rs.getString(2));
-//            System.out.println(rs.getString(3));
-//            System.out.println(rs.getString(4));
-//            System.out.println(rs.getString(5));
-//        }
-
-//        ResultSet rs1 = prepSts.executeQuery();
-//        System.out.println(" ");
-//        while(rs1.next()){
-//            System.out.println(rs1.getString(1));
-//            System.out.println(rs1.getString(2));
-//            System.out.println(rs1.getString(3));
-//        }
+        //TODO: check that the crs outputs correctly - can be done through a print statement
         RowSetFactory aFactory = RowSetProvider.newFactory();
         CachedRowSet crs = aFactory.createCachedRowSet();
         crs.populate(rs);  //need to reset the iterator of rs??
-
-//        RowSetFactory bFactory = RowSetProvider.newFactory();
-//        CachedRowSet crs1 = bFactory.createCachedRowSet();
-//        crs1.populate(rs1);
-
-//        while (rs1.next()){
-//            crs.moveToInsertRow(); // moves to the next row to insert in
-//            ResultSetMetaData currentRsMetaData = rs1.getMetaData(); // gets data about the rs1 resultset, allowing us to get the column count
-//            int numberOfColumns = currentRsMetaData.getColumnCount();// gets the column count
-//            for (int i = 1; i <= numberOfColumns; i++){
-//                crs.updateObject(i, rs1.getObject(i)); //adds it
-//            }
-//            crs.insertRow(); //inserts it
-//            crs.moveToCurrentRow();
-//        }
-
         crs.beforeFirst();
-//        crs1.beforeFirst();
-        this.outcome = crs; //now populated
-//        this.secondOutcome = crs1;
-
-        //System.out.println("my outcome: " + this.outcome);
-
-//        while(rs.next()){
-//            System.out.println(rs.getString(1));
-//        }
-
-
-//        while(rs1.next()){
-//            System.out.println(rs1.getString(1));
-//
-//        }
-
-        //int numcol = crs.getMetaData().getColumnCount();
-        //while(crs.next()){
-//        while(this.outcome.next()){
-//            for(int i = 1; i <= numcol; i++){
-//                System.out.println("outcome: " + crs.getString(i) + "\t");
-//            }
-//        }
-       // crs.beforeFirst();
+       // this.outcome = crs; //now populated
         rs.close();
         pstmt.close();
         //connection.close(); can't close the connection as we need to access the in-memory database, and this would destroy it
 
-        return this.outcome;
+        return crs;
 
     }
 
@@ -230,7 +167,7 @@ public class Service extends Thread {
         crs.populate(rs);
         crs.beforeFirst();
 
-        while(rs.next()){
+        while(rs.next()){ // doesnt go in here?
             System.out.println(rs.getString(1));
             System.out.println(rs.getString(2));
             System.out.println(rs.getString(3));
@@ -279,26 +216,26 @@ public class Service extends Thread {
     public void returnInstructions(){
         try {
             //Return outcome
-            while(this.outcome.next()) {
+            while(this.returning_ingredients.next()) {
 
-                String recipe_name = outcome.getString("recipe_name");
-                String prep_time = outcome.getString("prep_time");
-                String cook_time = outcome.getString("cook_time");
-                String difficulty_level = outcome.getString("difficulty_level");
-                String instructions = outcome.getString("instructions");
+                String recipe_name = returning_ingredients.getString("recipe_name");
+                String prep_time = returning_ingredients.getString("prep_time");
+                String cook_time = returning_ingredients.getString("cook_time");
+                String difficulty_level = returning_ingredients.getString("difficulty_level");
+                String instructions = returning_ingredients.getString("instructions");
 //                String ingredient_name = outcome.getString("ingredient_name");
 //                String quantity_needed = outcome.getString("quantity_needed");
 //                String quantity_unit = outcome.getString("quantity_unit");
 
                 //System.out.println(recipe_name + " " + prep_time + " " + cook_time + " " + difficulty_level + " " + instructions + " " + ingredient_name + " " + quantity_needed + " " + quantity_unit);
             }
-            this.outcome.beforeFirst();
+            //this.outcome.beforeFirst();
             OutputStream outcomeStream = this.serviceSocket.getOutputStream();
             ObjectOutputStream outcomeStreamWriter = new ObjectOutputStream(outcomeStream);
-            outcomeStreamWriter.writeObject(this.outcome); //not sure if this.outcome is correct
+            outcomeStreamWriter.writeObject(this.returning_ingredients); //not sure if this.outcome is correct
             outcomeStreamWriter.flush();
 
-            System.out.println("Service thread " + this.getId() + ": Service outcome returned; " + this.outcome);
+            System.out.println("Service thread " + this.getId() + ": Service outcome returned; " + this.returning_ingredients);
 
             //Terminating connection of the service socket
 

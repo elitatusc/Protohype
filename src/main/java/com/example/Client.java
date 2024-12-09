@@ -454,7 +454,7 @@ public class Client extends Application{
 
             this.reportServiceOutcomeRecipes();
 
-            this.clientSocket.close();
+            //this.clientSocket.close();
 
 
         }catch(Exception e)
@@ -477,7 +477,7 @@ public class Client extends Application{
             this.reportInstructions();
             System.out.println("D3");
 
-            this.clientSocket.close();
+            //this.clientSocket.close();
             System.out.println("D4");
 
 
