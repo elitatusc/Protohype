@@ -459,8 +459,8 @@ public class Client extends Application{
             }
         });
         //This binds the widths of the table to the border pane width and height meaning that the table will fill out the whole space
-        recipeTable.prefWidthProperty().bind(borderPane.widthProperty());
-        recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
+        //recipeTable.prefWidthProperty().bind(borderPane.widthProperty());
+        //recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
 
 
         //need to edit these so they fit correctly and fill whole page
@@ -477,7 +477,6 @@ public class Client extends Application{
     private Scene createScene2() {
         //The main grid pane of the second scene
         BorderPane borderPane = new BorderPane();
-        HBox labelBox = new HBox();
         VBox rightPane = new VBox();
         BorderPane topPane = new BorderPane();
 
@@ -522,17 +521,17 @@ public class Client extends Application{
         TableColumn<RecipeTable,String> ingredient_name = new TableColumn<RecipeTable,String>("Ingredient");
         TableColumn<RecipeTable,String> quantity_needed = new TableColumn<RecipeTable,String>("Quantity");
         TableColumn<RecipeTable,String> quantity_unit = new TableColumn<RecipeTable,String>("Quantity Unit");
-        rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
+        //rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
 
         ingredient_name.setCellValueFactory(new PropertyValueFactory("Ingredient"));
         quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
-        quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
-        borderPane.setRight(rightPane);
+        quantity_needed.setCellValueFactory(new PropertyValueFactory("QuantityUnit"));
+        //borderPane.setRight(rightPane);
         //Will go on the right hand side of the screen
 
-        borderPane.setTop(topPane);
+        borderPane.setTop(ingredientsTable);
 
-        //reportServiceOutcomeInstructions();
+        getInstructionsExecute();
         return new Scene(borderPane, 800, 600);
     }
 
