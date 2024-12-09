@@ -240,7 +240,7 @@ public class Service extends Thread {
         rs.close();
         pstmt.close();
 
-        return this.secondOutcome;
+        return crs;
     }
 
 
