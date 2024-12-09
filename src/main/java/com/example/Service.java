@@ -205,7 +205,7 @@ public class Service extends Thread {
 
     }
 
-    public ResultSet attendIngredients() throws Exception { //attendInstructions isnt being called?
+    public ResultSet attendIngredients() throws Exception { //doesnt print second outcome
         this.secondOutcome = null;
         String jdbcURL = "jdbc:h2:mem:receipe";
 
@@ -223,21 +223,23 @@ public class Service extends Thread {
         Connection connection = DriverManager.getConnection(jdbcURL);
         PreparedStatement pstmt = connection.prepareStatement(sql2);
         pstmt.setString(1, this.requestStr[0]);
-        ResultSet rs = pstmt.executeQuery();
+        ResultSet rs1 = pstmt.executeQuery();
 
         RowSetFactory aFactory = RowSetProvider.newFactory();
         CachedRowSet crs = aFactory.createCachedRowSet();
-        crs.populate(rs);
-        crs.beforeFirst();
-
-        while(rs.next()){
-            System.out.println(rs.getString(1));
-            System.out.println(rs.getString(2));
-            System.out.println(rs.getString(3));
+        crs.populate(rs1);
+        while(rs1.next()){
+            System.out.println("pritning second outcome");
+            System.out.println(rs1.getString(1));
+            System.out.println(rs1.getString(2));
+            System.out.println(rs1.getString(3));
         }
+        crs.beforeFirst();
+        //rs1.beforeFirst();
+
 
         this.secondOutcome = crs;
-        rs.close();
+        rs1.close();
         pstmt.close();
 
         return this.secondOutcome;
@@ -251,24 +253,28 @@ public class Service extends Thread {
             //Return outcome
             while(this.outcome.next()) {
 
+                System.out.println("printing return service outcome: ");
                 String recipe_name = outcome.getString("recipe_name");
                 String prep_time = outcome.getString("prep_time");
                 String cook_time = outcome.getString("cook_time");
                 String difficulty_level = outcome.getString("difficulty_level");
 
 
-                System.out.println(recipe_name + " " + prep_time + " " + cook_time + " " +difficulty_level);
+                System.out.println(recipe_name + "+" + prep_time + "+" + cook_time + "+" +difficulty_level);
             }
             this.outcome.beforeFirst();
             OutputStream outcomeStream = this.serviceSocket.getOutputStream();
             ObjectOutputStream outcomeStreamWriter = new ObjectOutputStream(outcomeStream);
             outcomeStreamWriter.writeObject(this.outcome); //not sure if this.outcome is correct
             outcomeStreamWriter.flush();
+            //adding in close
+            //outcomeStreamWriter.close();
 
             System.out.println("Service thread " + this.getId() + ": Service outcome returned; " + this.outcome);
 
             //Terminating connection of the service socket
 
+            //comment out closing socket - find me
             this.serviceSocket.close();
 
         } catch (IOException | SQLException e) {
@@ -278,9 +284,12 @@ public class Service extends Thread {
 
     public void returnInstructions(){
         try {
+            //find me
+            //this.outcome.beforeFirst();
             //Return outcome
             while(this.outcome.next()) {
 
+                System.out.println("pritning return instructions");
                 String recipe_name = outcome.getString("recipe_name");
                 String prep_time = outcome.getString("prep_time");
                 String cook_time = outcome.getString("cook_time");
@@ -290,15 +299,53 @@ public class Service extends Thread {
 //                String quantity_needed = outcome.getString("quantity_needed");
 //                String quantity_unit = outcome.getString("quantity_unit");
 
-                //System.out.println(recipe_name + " " + prep_time + " " + cook_time + " " + difficulty_level + " " + instructions + " " + ingredient_name + " " + quantity_needed + " " + quantity_unit);
+                System.out.println(recipe_name + " " + prep_time + " " + cook_time + " " +difficulty_level + " " + instructions);
+
             }
             this.outcome.beforeFirst();
-            OutputStream outcomeStream = this.serviceSocket.getOutputStream();
-            ObjectOutputStream outcomeStreamWriter = new ObjectOutputStream(outcomeStream);
-            outcomeStreamWriter.writeObject(this.outcome); //not sure if this.outcome is correct
-            outcomeStreamWriter.flush();
+            OutputStream outcomeStream1 = this.serviceSocket.getOutputStream();
+            ObjectOutputStream outcomeStreamWriter = new ObjectOutputStream(outcomeStream1);
+            try {
+                outcomeStreamWriter.writeObject(this.outcome); //not sure if this.outcome is correct
+                outcomeStreamWriter.flush();
+            } catch (IOException e){
+                System.out.println("failed to write" + e.getMessage());
+            }
 
             System.out.println("Service thread " + this.getId() + ": Service outcome returned; " + this.outcome);
+
+            //Terminating connection of the service socket
+
+            //comment out closing socket - find me
+            //closing the service socket here would mean that return`ingredients couldnt use the socket?
+            //this.serviceSocket.close();
+
+        } catch (IOException | SQLException e) {
+            System.out.println("Service thread " + this.getId() + ": " + e);
+        }
+    }
+
+    public void returnIngredients(){ //isnt printing return ingredients
+        try {
+            //Return outcome
+            while(this.secondOutcome.next()) {
+                System.out.println("printing return ingredients");
+                String ingredient_name = secondOutcome.getString("ingredient_name");
+                String quantity_needed = secondOutcome.getString("quantity_needed");
+                String quantity_unit = secondOutcome.getString("quantity_unit");
+                System.out.println(ingredient_name + " " + quantity_needed + " " + quantity_unit);
+
+
+                //System.out.println(recipe_name + " " + prep_time + " " + cook_time + " " + difficulty_level + " " + instructions + " " + ingredient_name + " " + quantity_needed + " " + quantity_unit);
+            }
+
+            this.secondOutcome.beforeFirst();
+            OutputStream outcomeStream = this.serviceSocket.getOutputStream();
+            ObjectOutputStream outcomeStreamWriter = new ObjectOutputStream(outcomeStream);
+            outcomeStreamWriter.writeObject(this.secondOutcome); //broken pipe here
+            outcomeStreamWriter.flush();
+
+            System.out.println("Service thread " + this.getId() + ": Service outcome returned; " + this.secondOutcome);
 
             //Terminating connection of the service socket
 
@@ -331,6 +378,7 @@ public class Service extends Thread {
                 this.returnServiceOutcome();
             } else{
                 this.returnInstructions();
+                this.returnIngredients();
             }
 
 
