@@ -606,6 +606,8 @@ public class Client extends Application{
             @Override
             public void handle(ActionEvent event){
                 thePrimaryStage.setScene(createScene1());
+                // call execute method here
+
             }
         });
         back.setStyle("-fx-font-size: 14px;");
