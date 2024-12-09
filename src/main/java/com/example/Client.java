@@ -21,7 +21,6 @@ import javax.sql.rowset.RowSetProvider;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -415,6 +414,9 @@ public class Client extends Application{
                 String cookingTime = serviceOutcome1.getString("cook_time");
                 timesBuilder.append("Cooking Time: ").append(cookingTime).append(" minutes\n");
                 System.out.println("h13");
+                // serviceOutcome.next();
+                timesBuilder.append(serviceOutcome1.getString("difficulty_level")).append("\n");
+                // serviceOutcome.next();
                 //Calculating the totalTime from the 2 times
                 int cookingTemp = Integer.parseInt(cookingTime);
                 int prepTemp = Integer.parseInt(prepTime);
@@ -646,7 +648,7 @@ public class Client extends Application{
                 me.execute();
             }
         });
-        generate.setStyle("-fx-font-size: 16px;");
+        generate.setStyle("-fx-font-size: 14px;");
 
         buttonsBox.getChildren().add(generate);
 
@@ -672,7 +674,7 @@ public class Client extends Application{
         byName.setOnAction(event -> filter(1));
         byDifficultyLow.setOnAction(event -> filter(3));
         byDifficultyHigh.setOnAction(event -> filter(4));
-        filter.setStyle("-fx-font-size: 16px;");
+        filter.setStyle("-fx-font-size: 14px;");
         filter.getItems().addAll(byName, byTotalTimeLow, byTotalTimeHigh, byDifficultyLow, byDifficultyHigh);
         //This is adding the menu options to the actual menu button
         buttonsBox.getChildren().add(filter);
@@ -726,7 +728,7 @@ public class Client extends Application{
             }
         });
         //This binds the widths of the table to the border pane width and height meaning that the table will fill out the whole space
-        recipeTable.setStyle("-fx-font-size: 16px;");
+        recipeTable.setStyle("-fx-font-size: 14px;");
         recipeTable.prefWidthProperty().bind(borderPane.widthProperty());
         recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
 
@@ -765,7 +767,7 @@ public class Client extends Application{
 
             }
         });
-        back.setStyle("-fx-font-size: 16px;");
+        back.setStyle("-fx-font-size: 14px;");
         topPane.setLeft(back);
 
         Label positioning = new Label("         ");
@@ -774,44 +776,41 @@ public class Client extends Application{
 
         //Adding the recipe name to the top of the scene
         Label recipeName = new Label();
-        recipeName.setStyle("-fx-font-size: 26px;");
-        recipeName.setUnderline(true);
         topPane.setCenter(recipeName);
+        recipeName.setStyle("-fx-font-size: 18px;");
 
         Label ingredientsLabel = new Label("Ingredients");
-        ingredientsLabel.setStyle("-fx-font-size: 20px; -fx-border-color: black; -fx-border-width: 0.5; -fx-padding: 3;");
+        ingredientsLabel.setStyle("-fx-font-size: 16px;");
 
         //Now we will make the text area for the time and difficulty information
         TextArea timeInformation = new TextArea();
         timeInformation.setText("Testing Times");
         timeInformation.setWrapText(true); //Setting this to true allows the text to show if its too long
         topPane.setRight(timeInformation);
-        timeInformation.setPrefHeight(120);
-        timeInformation.setPrefWidth(230);
-        timeInformation.setStyle("-fx-font-size: 14px;");
 
         //Now we will make the text area for the ingredients
         TextArea instructions = new TextArea();
         instructions.setText("Testing instructions");
         instructions.setWrapText(true);
         borderPane.setCenter(instructions);
-        instructions.setStyle("-fx-font-size: 16px;");
 
         //Making the table where the ingredients and quantities will go
         TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
         TableColumn<RecipeTable,String> ingredient_name = new TableColumn<RecipeTable,String>("Ingredient");
         TableColumn<RecipeTable,String> quantity_needed = new TableColumn<RecipeTable,String>("Quantity");
         TableColumn<RecipeTable,String> quantity_unit = new TableColumn<RecipeTable,String>("Quantity Unit");
-        VBox.setVgrow(ingredientsTable, Priority.ALWAYS);
         rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
 
         ingredient_name.setCellValueFactory(new PropertyValueFactory("Ingredient"));
         quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
-        quantity_unit.setCellValueFactory(new PropertyValueFactory("Quantity Unit"));
+        quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
         borderPane.setRight(rightPane);
         //Will go on the right hand side of the screen
 
         borderPane.setTop(topPane);
+
+        //reportServiceOutcomeInstructions();
+        //getInstructionsExecute();
 
         return new Scene(borderPane, 800, 600);
     }
