@@ -259,7 +259,7 @@ public class Client extends Application{
 
     public void reportServiceOutcomeInstructions() {
         try {
-            BorderPane borderPane = (BorderPane) primaryStageVariable.getScene().getRoot();
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
             InputStream outcomeStream = clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
