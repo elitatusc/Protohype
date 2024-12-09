@@ -259,7 +259,7 @@ public class Client extends Application{
 
     public void reportServiceOutcomeInstructions() {
         try {
-            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+            BorderPane borderPane = (BorderPane) primaryStageVariable.getScene().getRoot();
             InputStream outcomeStream = clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
             serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
@@ -387,7 +387,7 @@ public class Client extends Application{
     private Scene scene2;
 
     private TableView<RecipeTable> recipeTable;
-    private Stage thePrimaryStageprimaryStage;
+    private Stage primaryStageVariable;
     @Override
     public void start(Stage primaryStage) {
         // Create Scene 1 and Scene 2
@@ -395,6 +395,7 @@ public class Client extends Application{
         // Set the initial scene
         primaryStage.setTitle("Recipe Suggestions");
         primaryStage.setScene(scene1);
+        primaryStage.setResizable(true);
         primaryStage.show();
         thePrimaryStage = primaryStage;
 
@@ -488,8 +489,7 @@ public class Client extends Application{
     private Scene createScene1() {
         BorderPane borderPane = new BorderPane();
         HBox buttonsBox = new HBox();
-
-
+        HBox tableHolder = new HBox();
         //This is the button you press to generate the recipes (fill out the table)
         Button generate = new Button();
         generate.setText("Generate Recipes");
@@ -576,8 +576,14 @@ public class Client extends Application{
             }
         });
         //This binds the widths of the table to the border pane width and height meaning that the table will fill out the whole space
+        recipeTable.setStyle("-fx-font-size: 14px;");
         recipeTable.prefWidthProperty().bind(borderPane.widthProperty());
         recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
+
+        recipeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        recipeTable.setMaxHeight(Double.MAX_VALUE);
+        recipeTable.setMaxWidth(Double.MAX_VALUE);
 
 
         //need to edit these so they fit correctly and fill whole page
@@ -594,7 +600,6 @@ public class Client extends Application{
     private Scene createScene2() {
         //The main grid pane of the second scene
         BorderPane borderPane = new BorderPane();
-        HBox labelBox = new HBox();
         VBox rightPane = new VBox();
         BorderPane topPane = new BorderPane();
 
