@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import java.sql.*;
+import java.util.Collections;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.sql.rowset.RowSetProvider;
@@ -33,6 +34,9 @@ import javafx.collections.ObservableList;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+
 public class Client extends Application{
 
     public static Client me; //Get the application instance in javafx
@@ -42,6 +46,8 @@ public class Client extends Application{
     private Socket clientSocket = null;
 
     private CachedRowSet serviceOutcome = null; //The service outcome
+
+    private CachedRowSet serviceOutcome1 = null;
     private Label recipeName;
     private TextArea timeInformation;
 
@@ -74,6 +80,14 @@ public class Client extends Application{
 
         public StringProperty getName() {
             return recipeName;
+        }
+
+        public StringProperty getTotalTime(){
+            return totalTime;
+        }
+
+        public StringProperty getDifficulty(){
+            return difficulty;
         }
 
 
@@ -246,154 +260,182 @@ public class Client extends Application{
         }
     }
 
-    public void reportInstructions(){
-        System.out.println("hello");
-        try {
-            InputStream outcomeStream = this.clientSocket.getInputStream();
-            System.out.println("outcome:" + outcomeStream);
-            try {
-                System.out.println("tried");
-                ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream); //this line breaks
-                System.out.println("pass");
-            } catch (IOException e){
-                e.printStackTrace();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-            System.out.println("hello");
-
-
-            //ResultSet temporary = (ResultSet) outcomeStreamReader.readObject();
-
-
-            System.out.println("Debug 1");
-            //TableView outputBox = (TableView) thePrimaryStage.getScene().getRoot(); //error is here
-            //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
-
-            this.serviceOutcome = RowSetProvider.newFactory().createCachedRowSet();
-
-
-            //this.serviceOutcome.populate(temporary);
-
-
-            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
-            System.out.println("Debug 2");
-            //Getting the border pane from the stage
-            //This will allow us to put the results in there
-            TableView<RecipeTable> outputTable = (TableView<RecipeTable>) borderPane.getCenter();
-            if (outputTable == null) {
-
-                outputTable = new TableView<>();
-                borderPane.setCenter(outputTable);
-            }
-            //Accessing the table that is in the centre of the borderPane
-            System.out.println("Debug 3");
-            ObservableList<RecipeTable> tmpRecipes = outputTable.getItems();
-            tmpRecipes.clear();
-            System.out.println("Debug 4");
-
-            if (serviceOutcome == null) {
-                System.out.println("No data available.");
-            }
-
-            while (this.serviceOutcome.next()) {
-                System.out.println("Row Found");
-                RecipeTable recipe = new RecipeTable();
-                recipe.setRecipeName(serviceOutcome.getString("recipe_name"));
-                System.out.println("re");
-                recipe.setPrepTime(serviceOutcome.getString("prep_time"));
-                System.out.println("pre");
-                recipe.setCookTime(serviceOutcome.getString("cook_time"));
-                System.out.println("co");
-                //int total = Integer.parseInt(serviceOutcome.getString("prep_time")) + Integer.parseInt(serviceOutcome.getString("cook_time"));
-                //String total_time = String.valueOf(total);
-                //recipe.setTotalTime(total_time);
-                recipe.setDifficulty(serviceOutcome.getString("difficulty_level"));
-                System.out.println("di");
-                recipe.setInstructions(serviceOutcome.getString("instructions"));
-                System.out.println("in");
-                //System.out.println(recipe.getRecipeName() + " | " + recipe.getLabel() + recipe.getGenre() + " | " + recipe.getRrp() + " | " + record.getCopyID());
-                //Can do this later as need to do get methods
-
-                tmpRecipes.add(recipe);
-            }
-
-            this.serviceOutcome.beforeFirst();
-            System.out.println("Debug 5");
-            outputTable.setItems(tmpRecipes);
-            System.out.println("Debug 6");
-
-            String tmp = " ";
-            //System.out.println(tmp +"\n====================================\n");
-        }catch(IOException e){
-            System.out.println("Client: I/O error. " + e);
-        }
-//        catch(ClassNotFoundException e){
-//            System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
+//    public void reportInstructions(){
+//        System.out.println("hello");
+//        try {
+//            InputStream outcomeStream = this.clientSocket.getInputStream();
+//            System.out.println("outcome:" + outcomeStream);
+//
+//            ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream); //this line breaks
+//            ResultSet temporary = (ResultSet) outcomeStreamReader.readObject(); //handle this exception
+//
+////            try {
+////                System.out.println("tried");
+////                ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream); //this line breaks
+////                ResultSet temporary = (ResultSet) outcomeStreamReader.readObject();
+////                System.out.println("pass");
+////            } catch (IOException e){
+////                e.printStackTrace();
+////            } catch (Exception e){
+////                e.printStackTrace();
+////            }
+//
+//
+////            ResultSet temporary = (ResultSet) outcomeStreamReader.readObject();
+//
+//
+//            System.out.println("Debug 1");
+//            //TableView outputBox = (TableView) thePrimaryStage.getScene().getRoot(); //error is here
+//            //ObservableList<MyTableRecord> tmpRecords = outputBox.getItems();
+//
+//            this.serviceOutcome = RowSetProvider.newFactory().createCachedRowSet();
+//            this.serviceOutcome.populate(temporary);
+//
+//
+//            //this.serviceOutcome.populate(temporary);
+//
+//
+//            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot(); // breaks here - Cannot invoke "javafx.stage.Stage.getScene()" because "com.example.Client.thePrimaryStage" is null
+//            System.out.println("Debug 2");
+//            //Getting the border pane from the stage
+//            //This will allow us to put the results in there
+//            TableView<RecipeTable> outputTable = (TableView<RecipeTable>) borderPane.getCenter();
+//            if (outputTable == null) {
+//
+//                outputTable = new TableView<>();
+//                borderPane.setCenter(outputTable);
+//            }
+//            //Accessing the table that is in the centre of the borderPane
+//            System.out.println("Debug 3");
+//            ObservableList<RecipeTable> tmpRecipes = outputTable.getItems();
+//            tmpRecipes.clear();
+//            System.out.println("Debug 4");
+//
+//            if (this.serviceOutcome == null) {
+//                System.out.println("No data available.");
+//            }
+//
+//            while (this.serviceOutcome.next()) { //not going in here - find me
+//                System.out.println("Row Found");
+//                RecipeTable recipe = new RecipeTable();
+//                recipe.setRecipeName(serviceOutcome.getString("recipe_name"));
+//                System.out.println("re");
+//                recipe.setPrepTime(serviceOutcome.getString("prep_time"));
+//                System.out.println("pre");
+//                recipe.setCookTime(serviceOutcome.getString("cook_time"));
+//                System.out.println("co");
+//                //int total = Integer.parseInt(serviceOutcome.getString("prep_time")) + Integer.parseInt(serviceOutcome.getString("cook_time"));
+//                //String total_time = String.valueOf(total);
+//                //recipe.setTotalTime(total_time);
+//                recipe.setDifficulty(serviceOutcome.getString("difficulty_level"));
+//                System.out.println("di");
+//                recipe.setInstructions(serviceOutcome.getString("instructions"));
+//                System.out.println("in");
+//                //System.out.println(recipe.getRecipeName() + " | " + recipe.getLabel() + recipe.getGenre() + " | " + recipe.getRrp() + " | " + record.getCopyID());
+//                //Can do this later as need to do get methods
+//
+//                tmpRecipes.add(recipe);
+//            }
+//
+//            this.serviceOutcome.beforeFirst();
+//            System.out.println("Debug 5");
+//            outputTable.setItems(tmpRecipes);
+//            System.out.println("Debug 6");
+//
+//            String tmp = " ";
+//            //System.out.println(tmp +"\n====================================\n");
+//        }catch(IOException e){
+//            System.out.println("Client: I/O error. " + e);
 //        }
-        catch(SQLException e){ //goes into here
-            System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
-        }
-    }
+////        catch(ClassNotFoundException e){
+////            System.out.println("Client: Unable to cast read object to CachedRowSet. " + e);
+////        }
+//        catch(SQLException e){ //goes into here
+//            System.out.println("Client: Can't retrieve requested attribute from result set. " + e);
+//        }
+//        catch(ClassNotFoundException e){
+//            System.out.println("Class not found. " + e);
+//        }
+//    }
+
+
 
     public void reportServiceOutcomeInstructions() {
         System.out.println("oo");
         try {
             System.out.println("h");
+            //BorderPane borderPane = (BorderPane) primaryStageVariable.getScene().getRoot();
             BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
             System.out.println("h2");
             InputStream outcomeStream = clientSocket.getInputStream();
             System.out.println("h3");
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream); //this line is the error
             System.out.println("h4");
-            serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
+            ResultSet temp = (ResultSet) outcomeStreamReader.readObject();
+            this.serviceOutcome1= RowSetProvider.newFactory().createCachedRowSet();
+            this.serviceOutcome1.populate(temp);
+           // serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
             System.out.println("h5");
-            serviceOutcome.next();
-
+            //serviceOutcome1.next();
+            System.out.println("hey");
 
 
             //This is the recipe name, which we are setting as a label
+            //HBox topPane = (HBox) borderPane.getTop();
             BorderPane topPane = (BorderPane) borderPane.getTop();
+            System.out.println("h6");
             recipeName = (Label) topPane.getCenter();
-            recipeName.setText(serviceOutcome.getString("recipe_name"));
-            serviceOutcome.next();
-            //We have to set the service outcome at next after every time we read a line
+            System.out.println("h7");
+            while (this.serviceOutcome1.next()) {
+                recipeName.setText(serviceOutcome1.getString("recipe_name"));
+                System.out.println("h8");
+                //serviceOutcome.next();
+                //We have to set the service outcome at next after every time we read a line
 
-            System.out.println("h2");
+                System.out.println("h9");
 
-            //Now we will put the information about the recipe times in the text area
-            StringBuilder timesBuilder = new StringBuilder();
-            //Iterating through to get the different lines from the input
-            String prepTime = serviceOutcome.getString("prepTime");
+                //Now we will put the information about the recipe times in the text area
+                StringBuilder timesBuilder = new StringBuilder();
+                System.out.println("After string builder");
+                //Iterating through to get the different lines from the input
 
-            System.out.println("h3");
+                //invalid cursor position
+                String prepTime = serviceOutcome1.getString("prep_time");
 
-            timesBuilder.append("Prep Time: ").append(prepTime).append(" minutes\n");
+                System.out.println("h10");
 
-            System.out.println("h4");
+                timesBuilder.append("Prep Time: ").append(prepTime).append(" minutes\n");
 
-            serviceOutcome.next();
+                System.out.println("h11");
 
-            System.out.println("h5");
-            String cookingTime = serviceOutcome.getString("cookingTime");
-            timesBuilder.append("Cooking Time: ").append(cookingTime).append(" minutes\n");
-            serviceOutcome.next();
-            timesBuilder.append(serviceOutcome.getString("difficultyLevel")).append("\n");
-            serviceOutcome.next();
-            //Calculating the totalTime from the 2 times
-            int cookingTemp = Integer.parseInt(cookingTime);
-            int prepTemp = Integer.parseInt(prepTime);
-            int totalTime = prepTemp + cookingTemp;
-            timesBuilder.append("Total Time: ").append(totalTime).append(" minutes\n");
-            timesBuilder.append("Difficulty Level: ").append(serviceOutcome.getString("difficultyLevel")).append("\n");
-            //This is where we will put the information about times and difficulty
-            String timeText = timesBuilder.toString();
-            timeInformation = (TextArea) topPane.getRight();
-            timeInformation.setText(timeText);
+                //serviceOutcome.next();
 
-            //Now we will get the instructions and put them in another text field
-            TextArea instructionsText = (TextArea) borderPane.getCenter();
-            instructionsText.setText(serviceOutcome.getString("instructions"));
+                System.out.println("h12");
+                String cookingTime = serviceOutcome1.getString("cook_time");
+                timesBuilder.append("Cooking Time: ").append(cookingTime).append(" minutes\n");
+                System.out.println("h13");
+                // serviceOutcome.next();
+                timesBuilder.append(serviceOutcome1.getString("difficulty_level")).append("\n");
+                // serviceOutcome.next();
+                //Calculating the totalTime from the 2 times
+                int cookingTemp = Integer.parseInt(cookingTime);
+                int prepTemp = Integer.parseInt(prepTime);
+                int totalTime = prepTemp + cookingTemp;
+                timesBuilder.append("Total Time: ").append(totalTime).append(" minutes\n");
+                timesBuilder.append("Difficulty Level: ").append(serviceOutcome1.getString("difficulty_level")).append("\n");
+
+                //This is where we will put the information about times and difficulty
+                String timeText = timesBuilder.toString();
+                timeInformation = (TextArea) topPane.getRight();
+                timeInformation.setText(timeText);
+
+                //Now we will get the instructions and put them in another text field
+                System.out.println("1");
+                TextArea instructionsText = (TextArea) borderPane.getCenter();
+                System.out.println("2");
+                instructionsText.setText(serviceOutcome1.getString("instructions"));
+                System.out.println("3");
+            }
 
         } catch(IOException e){
             System.out.println("Client: I/O error. " + e);
@@ -454,6 +496,7 @@ public class Client extends Application{
 
             this.reportServiceOutcomeRecipes();
 
+            //comment out close socket
             //this.clientSocket.close();
 
 
@@ -467,18 +510,19 @@ public class Client extends Application{
         try{
             //Initializes the socket
             this.initializeSocket();
-            System.out.println("D1");
 
             //Request service
             this.requestInstructions();
-            System.out.println("D2");
 
             //this.reportServiceOutcomeInstructions();
-            this.reportInstructions();
-            System.out.println("D3");
+            //this.reportInstructions(); //does this just do instructions or ingredients too
+            //change to calling report service outcome instructions
+            this.reportServiceOutcomeInstructions();
+            //need to call report Ingredients
 
+            //closing the socket
             //this.clientSocket.close();
-            System.out.println("D4");
+
 
 
         }catch(Exception e)
@@ -490,25 +534,109 @@ public class Client extends Application{
     private Scene scene2;
 
     private TableView<RecipeTable> recipeTable;
-    private Stage thePrimaryStageprimaryStage;
+
     @Override
     public void start(Stage primaryStage) {
         // Create Scene 1 and Scene 2
         Scene scene1 = createScene1();
-
         // Set the initial scene
         primaryStage.setTitle("Recipe Suggestions");
         primaryStage.setScene(scene1);
+        primaryStage.setResizable(true);
         primaryStage.show();
         thePrimaryStage = primaryStage;
 
     }
 
+    private void filter(int filter_type){
+        BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+        TableView<RecipeTable> recipeTable = (TableView<RecipeTable>) borderPane.getCenter();
+        if (recipeTable == null) {
+            recipeTable = new TableView<>();
+            borderPane.setCenter(recipeTable);
+            return;
+        }
+        ObservableList<RecipeTable> listOfRecipes = recipeTable.getItems();
+        int length = listOfRecipes.size();
+        if (filter_type == 0 || filter_type == 2){
+            //Filter by time taken (total)
+            for (int i = 0; i < (length-1); i++) {
+                for (int j = 0; j < (length - 1); j++) {
+                    int totalTime1 = Integer.parseInt(listOfRecipes.get(j).getTotalTime().get());
+                    int totalTime2 = Integer.parseInt(listOfRecipes.get(j + 1).getTotalTime().get());
+                    if (totalTime1 > totalTime2) {
+                        RecipeTable temp = listOfRecipes.get(j);
+                        listOfRecipes.set(j, listOfRecipes.get(j + 1));
+                        listOfRecipes.set(j + 1, temp);
+
+                    }
+                }
+            }
+            if (filter_type == 2){
+                Collections.reverse(listOfRecipes);
+            }
+        }
+        else if (filter_type == 1){
+            //Filter alphabetically
+            for (int i = 0; i < (length-1); i++) {
+                for (int j = 0; j < (length - 1); j++) {
+                    String name1 = listOfRecipes.get(j).getName().get();
+                    String name2 = listOfRecipes.get(j+1).getName().get();
+                    if (name1.compareTo(name2) > 0) {
+                        RecipeTable temp = listOfRecipes.get(j);
+                        listOfRecipes.set(j, listOfRecipes.get(j + 1));
+                        listOfRecipes.set(j + 1, temp);
+
+                    }
+                }
+            }
+        }
+        else if (filter_type == 3 || filter_type == 4){
+            for (int i = 0; i < (length-1); i++) {
+                for (int j = 0; j < (length - 1); j++) {
+                    int difficulty1 = getDifficulty(listOfRecipes.get(j).getDifficulty().get());
+                    int difficulty2 = getDifficulty(listOfRecipes.get(j+1).getDifficulty().get());
+                    if (difficulty1 > difficulty2){
+                        RecipeTable temp = listOfRecipes.get(j);
+                        listOfRecipes.set(j, listOfRecipes.get(j + 1));
+                        listOfRecipes.set(j + 1, temp);
+                    }
+                }
+            }
+            if (filter_type == 4){
+                Collections.reverse(listOfRecipes);
+            }
+            for (RecipeTable recipe: listOfRecipes){
+                System.out.println(recipe.getName().get());
+            }
+        }
+
+        TableView<RecipeTable> outputFilteredTable = (TableView<RecipeTable>) borderPane.getCenter();
+        if (outputFilteredTable == null) {
+            outputFilteredTable = new TableView<>();
+            borderPane.setCenter(outputFilteredTable);
+        }
+        outputFilteredTable.setItems(listOfRecipes);
+    }
+
+    private int getDifficulty(String difficulty){
+        int difficultyNumber = 0;
+        if (difficulty.equals("easy")){
+            difficultyNumber = 1;
+        }
+        else if (difficulty.equals("medium")){
+            difficultyNumber = 2;
+        }
+        else if (difficulty.equals("hard")){
+            difficultyNumber = 3;
+        }
+        return difficultyNumber;
+    }
+
     private Scene createScene1() {
         BorderPane borderPane = new BorderPane();
         HBox buttonsBox = new HBox();
-
-
+        HBox tableHolder = new HBox();
         //This is the button you press to generate the recipes (fill out the table)
         Button generate = new Button();
         generate.setText("Generate Recipes");
@@ -533,18 +661,39 @@ public class Client extends Application{
         HBox.setHgrow(expanding, Priority.ALWAYS);
         expanding.setMaxWidth(Double.MAX_VALUE);
 
-        //This is the filter button in the top right of the grid pane
-        Button filter = new Button();
-        filter.setText("Filter Recipes");
-        filter.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //filterRecipes();
-                //Make the filter recipes function
-            }
-        });
-        buttonsBox.getChildren().add(filter);
+        //This is a filter button that, when pressed, will produce a number of options
+        MenuButton filter = new MenuButton("Filter by");
+        MenuItem byName = new MenuItem("Alphabetically");
+        MenuItem byTotalTimeLow = new MenuItem("Time (low to high)");
+        MenuItem byTotalTimeHigh = new MenuItem("Time (high to low)");
+        MenuItem byDifficultyLow = new MenuItem("Difficulty (low to high)");
+        MenuItem byDifficultyHigh = new MenuItem("Difficulty (high to low)");
+
+        byTotalTimeLow.setOnAction(event -> filter(0));
+        byTotalTimeHigh.setOnAction(event -> filter(2));
+        byName.setOnAction(event -> filter(1));
+        byDifficultyLow.setOnAction(event -> filter(3));
+        byDifficultyHigh.setOnAction(event -> filter(4));
         filter.setStyle("-fx-font-size: 14px;");
+        filter.getItems().addAll(byName, byTotalTimeLow, byTotalTimeHigh, byDifficultyLow, byDifficultyHigh);
+        //This is adding the menu options to the actual menu button
+        buttonsBox.getChildren().add(filter);
+
+
+
+
+        //This is the filter button in the top right of the grid pane
+//        Button filter = new Button();
+//        filter.setText("Filter Recipes");
+//        filter.setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                //filterRecipes();
+//                //Make the filter recipes function
+//            }
+//        });
+//        buttonsBox.getChildren().add(filter);
+//        filter.setStyle("-fx-font-size: 14px;");
 
         TableView<RecipeTable> recipeTable = new TableView<>();
         recipeTable.setEditable(true);
@@ -571,14 +720,22 @@ public class Client extends Application{
                     System.out.println("Selected Recipe: " + selectedRecipe.getName().getValue());
                     //need to send request recipe to service
                     this.requestedRecipe = selectedRecipe.getName().getValue();
-                    me.getInstructionsExecute();
+                    //me.getInstructionsExecute();
                     thePrimaryStage.setScene(createScene2());
+                    me.getInstructionsExecute();
+                    //primaryStageVariable.setScene(createScene2());
                 }
             }
         });
         //This binds the widths of the table to the border pane width and height meaning that the table will fill out the whole space
+        recipeTable.setStyle("-fx-font-size: 14px;");
         recipeTable.prefWidthProperty().bind(borderPane.widthProperty());
         recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
+
+        recipeTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        recipeTable.setMaxHeight(Double.MAX_VALUE);
+        recipeTable.setMaxWidth(Double.MAX_VALUE);
 
 
         //need to edit these so they fit correctly and fill whole page
@@ -595,7 +752,7 @@ public class Client extends Application{
     private Scene createScene2() {
         //The main grid pane of the second scene
         BorderPane borderPane = new BorderPane();
-        HBox labelBox = new HBox();
+
         VBox rightPane = new VBox();
         BorderPane topPane = new BorderPane();
 
