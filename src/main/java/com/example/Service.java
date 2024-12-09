@@ -135,20 +135,30 @@ public class Service extends Thread {
         ResultSet rs1 = prepSts.executeQuery();
         RowSetFactory aFactory = RowSetProvider.newFactory();
         CachedRowSet crs = aFactory.createCachedRowSet();
+
+
         crs.populate(rs);  //need to reset the iterator of rs??
-        while (rs.next()){
+        while (rs1.next()){ // doesnt go into here, so doesnt populate the crs with rs1
             crs.moveToInsertRow(); // moves to the next row to insert in
             ResultSetMetaData currentRsMetaData = rs1.getMetaData(); // gets data about the rs1 resultset, allowing us to get the column count
             int numberOfColumns = currentRsMetaData.getColumnCount();// gets the column count
-            for (int i = 0; i < numberOfColumns; i++){
-                crs.updateObject(i, rs1.getObject(i)); //adds it
+            for (int i = 1; i <= numberOfColumns; i++){
+                if (rs1.getObject(i) != null) {
+                    crs.updateObject(i, rs1.getObject(i)); //adds it
+                }
             }
             crs.insertRow(); //inserts it
             crs.moveToCurrentRow();
         }
         crs.beforeFirst();
+//        int numcol = crs.getMetaData().getColumnCount();
+//        while(crs.next()){
+//            for (int i = 1; i <= numcol; i++){
+//                System.out.println(crs.getString(i) + "\t");
+//            }
+//        }
         this.outcome = crs; //now populated
-
+        crs.beforeFirst();
         rs.close();
         pstmt.close();
         //connection.close(); can't close the connection as we need to access the in-memory database, and this would destroy it

@@ -455,6 +455,7 @@ public class Client extends Application{
                     Scene myScene = createScene1();
                     System.out.println("Selected Recipe: " + selectedRecipe.getName().getValue());
                     this.requestedRecipe = selectedRecipe.getName().getValue();
+                    me.getInstructionsExecute();
                     thePrimaryStage.setScene(createScene2());
                 }
             }
@@ -489,6 +490,8 @@ public class Client extends Application{
             @Override
             public void handle(ActionEvent event){
                 thePrimaryStage.setScene(createScene1());
+                // call execute method here
+
             }
         });
         back.setStyle("-fx-font-size: 14px;");
