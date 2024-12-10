@@ -22,6 +22,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -48,6 +49,8 @@ public class Client extends Application{
     private CachedRowSet serviceOutcome = null; //The service outcome
 
     private CachedRowSet serviceOutcome1 = null;
+
+    private CachedRowSet serviceOutcome2 = null;
     private Label recipeName;
     private TextArea timeInformation;
 
@@ -450,22 +453,62 @@ public class Client extends Application{
     public void reportServiceOutcomeIngredients() {
         try {
             //Here we get and show the ingredients information for each recipe selected
-            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+//            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+//            InputStream outcomeStream = clientSocket.getInputStream();
+//            ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
+//            serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
+//            serviceOutcome.next();
+//
+//            TableView<RecipeTable> ingredientsTable = (TableView<RecipeTable>) borderPane.getRight();
+//            //Accessing the ingredient table that is on the right side of the borderPane
+//            ObservableList<RecipeTable> tmpInstructions = ingredientsTable.getItems();
+//            tmpInstructions.clear();
+//            RecipeTable recipe = new RecipeTable();
+//            recipe.setIngredients(serviceOutcome.getString("ingredient_name"));
+//            recipe.setQuantity(serviceOutcome.getString("quantity"));
+//            recipe.setQuantityUnit(serviceOutcome.getString("quantity_unit"));
+//            tmpInstructions.add(recipe);
+//            ingredientsTable.setItems(tmpInstructions);
+
+            //Here we get and show the ingredients information for each recipe selected
             InputStream outcomeStream = clientSocket.getInputStream();
             ObjectInputStream outcomeStreamReader = new ObjectInputStream(outcomeStream);
-            serviceOutcome = (CachedRowSet) outcomeStreamReader.readObject();
-            serviceOutcome.next();
+            //this.serviceOutcome2 = (CachedRowSet) outcomeStreamReader.readObject();
+            //serviceOutcome.next();
+            ResultSet temp = (ResultSet) outcomeStreamReader.readObject();
+            this.serviceOutcome2= RowSetProvider.newFactory().createCachedRowSet();
+            this.serviceOutcome2.populate(temp);
+            BorderPane borderPane = (BorderPane) thePrimaryStage.getScene().getRoot();
+            VBox ingredientsBox = (VBox) borderPane.getRight();
+            ObservableList<Node> right_children = ingredientsBox.getChildrenUnmodifiable();
+            //getting the table thats there already in the centre
+            TableView<RecipeTable> ingredientsOutput = new TableView<>();
+            for (int i = 0; i < right_children.size(); i++){
+                if (right_children.get(i) instanceof TableView){
+                    ingredientsOutput = (TableView) right_children.get(i);
+                    System.out.println("found table");
+                }
+            }
 
-            TableView<RecipeTable> ingredientsTable = (TableView<RecipeTable>) borderPane.getRight();
             //Accessing the ingredient table that is on the right side of the borderPane
-            ObservableList<RecipeTable> tmpInstructions = ingredientsTable.getItems();
+            ObservableList<RecipeTable> tmpInstructions = ingredientsOutput.getItems();
             tmpInstructions.clear();
-            RecipeTable recipe = new RecipeTable();
-            recipe.setIngredients(serviceOutcome.getString("ingredient_name"));
-            recipe.setQuantity(serviceOutcome.getString("quantity"));
-            recipe.setQuantityUnit(serviceOutcome.getString("quantity_unit"));
-            tmpInstructions.add(recipe);
-            ingredientsTable.setItems(tmpInstructions);
+            while(this.serviceOutcome2.next()) {
+                RecipeTable recipe = new RecipeTable();
+                System.out.println("hello");
+                recipe.setIngredients(serviceOutcome2.getString("ingredient_name"));
+                System.out.println("1");
+                recipe.setQuantity(serviceOutcome2.getString("quantity_needed"));
+                System.out.println("2");
+                recipe.setQuantityUnit(serviceOutcome2.getString("quantity_unit"));
+                System.out.println("3");
+                tmpInstructions.add(recipe);
+            }
+            this.serviceOutcome2.beforeFirst();
+            for (int i = 0; i < tmpInstructions.size(); i++){
+                System.out.println(tmpInstructions.get(i));
+            }
+            ingredientsOutput.setItems(tmpInstructions);
 
         } catch(IOException e){
             System.out.println("Client: I/O error. " + e);
@@ -519,9 +562,9 @@ public class Client extends Application{
             //change to calling report service outcome instructions
             this.reportServiceOutcomeInstructions();
             //need to call report Ingredients
-
+            this.reportServiceOutcomeIngredients();
             //closing the socket
-            //this.clientSocket.close();
+            this.clientSocket.close();
 
 
 
@@ -807,9 +850,9 @@ public class Client extends Application{
         VBox.setVgrow(ingredientsTable, Priority.ALWAYS);
         rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
 
-        ingredient_name.setCellValueFactory(new PropertyValueFactory("Ingredient"));
-        quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
-        quantity_unit.setCellValueFactory(new PropertyValueFactory("QuantityUnit"));
+        ingredient_name.setCellValueFactory(new PropertyValueFactory("ingredients"));
+        quantity_needed.setCellValueFactory(new PropertyValueFactory("quantity"));
+        quantity_unit.setCellValueFactory(new PropertyValueFactory("quantityUnit"));
         borderPane.setRight(rightPane);
         //Will go on the right hand side of the screen
 
