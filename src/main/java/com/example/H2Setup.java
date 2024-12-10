@@ -108,76 +108,76 @@ public class H2Setup {
                "INSERT INTO recipes (recipe_id, recipe_name, instructions, prep_time, cook_time, difficulty_level) VALUES (18, 'Cod and Chips', '1. Place cod and chips on baking tray.\n2. Place in oven for 25 minutes.\n3. Cook and drain peas and sweetcorn. ', 3, 25, 'Medium ');\n" +
                "INSERT INTO recipes (recipe_id, recipe_name, instructions, prep_time, cook_time, difficulty_level) VALUES (19, 'Pancakes', '1. Mix flour, egg and milk in a large bowl.\n2. Leave to sit for 20 minutes.\n3. Pour mixture into pan and let fry until golden on both sides. ', 25, 10, 'Medium ');";
 
-       String sqlInsert3 = "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (0, 'butter');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (1, 'milk');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (2, 'egg');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (3, 'tomato');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (4, 'pepper');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (5, 'mushroom');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (6, 'ketchup');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (7, 'pasta sauce');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (8, 'mayonaise');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (9, 'lemon juice');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (10, 'pesto');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (11, 'olives');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (12, 'yogurt');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (13, 'humous');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (14, 'carrot');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (15, 'onion');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (16, 'avocado');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (17, 'brocoli');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (18, 'cucumber');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (19, 'lettuce');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (20, 'mince');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (21, 'sausage');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (22, 'bacon');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (23, 'chicken');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (24, 'steak');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (25, 'cheddar');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (26, 'mozerella');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (27, 'garlic');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (28, 'parmesan');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (29, 'oat milk');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (30, 'tofu');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (31, 'prawns');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (32, 'bread');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (33, 'penne pasta');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (34, 'spagetti');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (35, 'granola');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (36, 'coco pops');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (37, 'honey');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (38, 'olive oil');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (39, 'sesame oil');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (40, 'vegetable oil');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (41, 'rice');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (42, 'noodle');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (43, 'flour');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (44, 'sugar');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (45, 'potato');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (46, 'salt');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (47, 'black pepper');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (48, 'salmon');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (49, 'cod');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (50, 'sweet potato');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (51, 'lasagne sheet');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (52, 'ginger');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (53, 'salt');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (54, 'cereal');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (55, 'chilli flakes');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (56, 'tomato sauce');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (57, 'tomato puree');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (58, 'salsa');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (59, 'sour cream');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (60, 'udon noodles');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (61, 'frozen chips');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (62, 'fennel seeds');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (63, 'chopped tomatoes');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (64, 'beansprouts');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (65, 'soy sauce');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (66, 'tuna');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (67, 'tortilla wrap');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (68, 'peas');\n" +
-               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (69, 'sweetcorn');";
+       String sqlInsert3 = "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (0, 'Butter');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (1, 'Milk');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (2, 'Egg');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (3, 'Tomato');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (4, 'Pepper');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (5, 'Mushroom');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (6, 'Ketchup');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (7, 'Pasta sauce');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (8, 'Mayonnaise');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (9, 'Lemon Juice');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (10, 'Pesto');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (11, 'Olives');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (12, 'Yogurt');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (13, 'Hummus');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (14, 'Carrot');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (15, 'Onion');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (16, 'Avocado');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (17, 'Broccoli');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (18, 'Cucumber');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (19, 'Lettuce');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (20, 'Mince');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (21, 'Sausage');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (22, 'Bacon');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (23, 'Chicken');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (24, 'Steak');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (25, 'Cheddar');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (26, 'Mozarella');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (27, 'Garlic');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (28, 'Parmesan');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (29, 'Oat Milk');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (30, 'Tofu');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (31, 'Prawns');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (32, 'Bread');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (33, 'Penne Pasta');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (34, 'Spaghetti');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (35, 'Granola');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (36, 'Coco Pops');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (37, 'Honey');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (38, 'Olive Oil');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (39, 'Sesame Oil');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (40, 'Vegetable Oil');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (41, 'Rice');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (42, 'Noodle');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (43, 'Flour');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (44, 'Sugar');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (45, 'Potato');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (46, 'Salt');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (47, 'Black Pepper');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (48, 'Salmon');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (49, 'Cod');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (50, 'Sweet Potato');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (51, 'Lasagne Sheet');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (52, 'Ginger');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (53, 'Salt');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (54, 'Cereal');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (55, 'Chilli Flakes');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (56, 'Tomato Sauce');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (57, 'Tomato Puree');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (58, 'Salsa');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (59, 'Sour Cream');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (60, 'Udon Noodles');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (61, 'Frozen Chips');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (62, 'Fennel Seeds');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (63, 'Chopped Tomatoes');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (64, 'Beansprouts');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (65, 'Soy Sauce');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (66, 'Tuna');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (67, 'Tortilla Wrap');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (68, 'Peas');\n" +
+               "INSERT INTO ingredients (ingredient_id, ingredient_name) VALUES (69, 'Sweetcorn');";
 
        String sqlInsert4 = "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity_needed, quantity_unit) VALUES (0, 2, 2, 'count');\n" +
                "INSERT INTO recipe_ingredients (recipe_id, ingredient_id, quantity_needed, quantity_unit) VALUES (0, 32, 1, 'count');\n" +
