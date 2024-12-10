@@ -1,5 +1,5 @@
 # Recipe Suggestion Application
-This repopsitory contains the source code for the recipe suggestion application for Student Smart Homes.
+This repository contains the source code for the Recipe Suggestion Application for Student Smart Homes.
 
 
 ### Project Information
