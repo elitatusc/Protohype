@@ -767,7 +767,7 @@ public class Client extends Application{
 
             }
         });
-        back.setStyle("-fx-font-size: 14px;");
+        back.setStyle("-fx-font-size: 16px;");
         topPane.setLeft(back);
 
         Label positioning = new Label("         ");
@@ -777,21 +777,26 @@ public class Client extends Application{
         //Adding the recipe name to the top of the scene
         Label recipeName = new Label();
         topPane.setCenter(recipeName);
-        recipeName.setStyle("-fx-font-size: 18px;");
+        recipeName.setUnderline(true);
+        recipeName.setStyle("-fx-font-size: 26px;");
 
         Label ingredientsLabel = new Label("Ingredients");
-        ingredientsLabel.setStyle("-fx-font-size: 16px;");
+        ingredientsLabel.setStyle("-fx-font-size: 20px; -fx-border-color: black; -fx-border-width: 0.5; -fx-padding: 3;");
 
         //Now we will make the text area for the time and difficulty information
         TextArea timeInformation = new TextArea();
         timeInformation.setText("Testing Times");
         timeInformation.setWrapText(true); //Setting this to true allows the text to show if its too long
+        timeInformation.setPrefHeight(120);
+        timeInformation.setPrefWidth(230);
         topPane.setRight(timeInformation);
+        timeInformation.setStyle("-fx-font-size: 14px;");
 
         //Now we will make the text area for the ingredients
         TextArea instructions = new TextArea();
         instructions.setText("Testing instructions");
         instructions.setWrapText(true);
+        instructions.setStyle("-fx-font-size: 16px;");
         borderPane.setCenter(instructions);
 
         //Making the table where the ingredients and quantities will go
@@ -799,18 +804,20 @@ public class Client extends Application{
         TableColumn<RecipeTable,String> ingredient_name = new TableColumn<RecipeTable,String>("Ingredient");
         TableColumn<RecipeTable,String> quantity_needed = new TableColumn<RecipeTable,String>("Quantity");
         TableColumn<RecipeTable,String> quantity_unit = new TableColumn<RecipeTable,String>("Quantity Unit");
+        VBox.setVgrow(ingredientsTable, Priority.ALWAYS);
         rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
 
         ingredient_name.setCellValueFactory(new PropertyValueFactory("Ingredient"));
         quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
-        quantity_needed.setCellValueFactory(new PropertyValueFactory("Quantity"));
+        quantity_unit.setCellValueFactory(new PropertyValueFactory("QuantityUnit"));
         borderPane.setRight(rightPane);
         //Will go on the right hand side of the screen
 
+        ObservableList<TableColumn<RecipeTable,?>> tmp = ingredientsTable.getColumns();
+        tmp.addAll(ingredient_name,quantity_needed,quantity_unit);
+
         borderPane.setTop(topPane);
 
-        //reportServiceOutcomeInstructions();
-        //getInstructionsExecute();
 
         return new Scene(borderPane, 800, 600);
     }
