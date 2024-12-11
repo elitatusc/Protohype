@@ -249,6 +249,7 @@ public class Client extends Application{
             this.serviceOutcome.beforeFirst();
             System.out.println("Debug 5");
             outputTable.setItems(tmpRecipes);
+            outputTable.setStyle("-fx-font-size: 16px;");
             System.out.println("Debug 6");
 
             String tmp = " ";
@@ -489,6 +490,7 @@ public class Client extends Application{
                 System.out.println(tmpInstructions.get(i));
             }
             ingredientsOutput.setItems(tmpInstructions);
+            ingredientsOutput.setStyle("-fx-font-size: 15px;");
 
         } catch(IOException e){
             System.out.println("Client: I/O error. " + e);
@@ -673,7 +675,7 @@ public class Client extends Application{
                 me.execute();
             }
         });
-        generate.setStyle("-fx-font-size: 14px;");
+        generate.setStyle("-fx-font-size: 15px;");
 
         buttonsBox.getChildren().add(generate);
 
@@ -699,26 +701,11 @@ public class Client extends Application{
         byName.setOnAction(event -> filter(1));
         byDifficultyLow.setOnAction(event -> filter(3));
         byDifficultyHigh.setOnAction(event -> filter(4));
-        filter.setStyle("-fx-font-size: 14px;");
+        filter.setStyle("-fx-font-size: 15px;");
         filter.getItems().addAll(byName, byTotalTimeLow, byTotalTimeHigh, byDifficultyLow, byDifficultyHigh);
         //This is adding the menu options to the actual menu button
         buttonsBox.getChildren().add(filter);
 
-
-
-
-        //This is the filter button in the top right of the grid pane
-//        Button filter = new Button();
-//        filter.setText("Filter Recipes");
-//        filter.setOnAction(new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                //filterRecipes();
-//                //Make the filter recipes function
-//            }
-//        });
-//        buttonsBox.getChildren().add(filter);
-//        filter.setStyle("-fx-font-size: 14px;");
 
         TableView<RecipeTable> recipeTable = new TableView<>();
         recipeTable.setEditable(true);
@@ -753,7 +740,7 @@ public class Client extends Application{
             }
         });
         //This binds the widths of the table to the border pane width and height meaning that the table will fill out the whole space
-        recipeTable.setStyle("-fx-font-size: 14px;");
+        recipeTable.setStyle("-fx-font-size: 16px;");
         recipeTable.prefWidthProperty().bind(borderPane.widthProperty());
         recipeTable.prefHeightProperty().bind(borderPane.heightProperty());
 
@@ -812,10 +799,10 @@ public class Client extends Application{
         TextArea timeInformation = new TextArea();
         timeInformation.setText("Testing Times");
         timeInformation.setWrapText(true); //Setting this to true allows the text to show if its too long
-        timeInformation.setPrefHeight(120);
-        timeInformation.setPrefWidth(230);
+        timeInformation.setPrefHeight(125);
+        timeInformation.setPrefWidth(250);
         topPane.setRight(timeInformation);
-        timeInformation.setStyle("-fx-font-size: 14px;");
+        timeInformation.setStyle("-fx-font-size: 13px;");
 
         //Now we will make the text area for the ingredients
         TextArea instructions = new TextArea();
@@ -828,15 +815,18 @@ public class Client extends Application{
         TableView<RecipeTable> ingredientsTable = new TableView<RecipeTable>();
         TableColumn<RecipeTable,String> ingredient_name = new TableColumn<RecipeTable,String>("Ingredient");
         TableColumn<RecipeTable,String> quantity_needed = new TableColumn<RecipeTable,String>("Quantity");
-        TableColumn<RecipeTable,String> quantity_unit = new TableColumn<RecipeTable,String>("Quantity Unit");
+        TableColumn<RecipeTable,String> quantity_unit = new TableColumn<RecipeTable,String>("Unit");
         VBox.setVgrow(ingredientsTable, Priority.ALWAYS);
         rightPane.getChildren().addAll(ingredientsLabel, ingredientsTable);
 
         ingredient_name.setCellValueFactory(new PropertyValueFactory("ingredients"));
         quantity_needed.setCellValueFactory(new PropertyValueFactory("quantity"));
         quantity_unit.setCellValueFactory(new PropertyValueFactory("quantityUnit"));
+        ingredientsTable.setStyle("-fx-font-size: 15px;");
         borderPane.setRight(rightPane);
-        //Will go on the right hand side of the screen
+
+        //ingredientsTable.prefWidthProperty().bind(rightPane.widthProperty());
+        //ingredientsLabel.prefHeightProperty().bind(rightPane.heightProperty());
 
         ObservableList<TableColumn<RecipeTable,?>> tmp = ingredientsTable.getColumns();
         tmp.addAll(ingredient_name,quantity_needed,quantity_unit);
