@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+// unused since we implemented h2
 public class PostgresDatabaseImpl implements DatabaseImpl{
     private ResultSet outcome = null;
 
