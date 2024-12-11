@@ -35,7 +35,7 @@ public class Server {
     //Runs the service loop
     public void executeServiceLoop()
     {
-        System.out.println("Server: Start service loop.");
+        System.out.println("Server: Start service loop");
         try {
             while (true) {
                 Socket aSocket = this.serverSocket.accept();
