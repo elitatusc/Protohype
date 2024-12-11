@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.sql.rowset.CachedRowSet;
 import java.net.Socket;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,4 +34,5 @@ public class ServiceTest {
         assertEquals(aBoolean, Boolean.TRUE);
 
     }
+
 }
