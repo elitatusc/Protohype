@@ -9,6 +9,7 @@ public class MainTest{
     void testFirstMethod(){
         Main mainInst = new Main();
         String result = mainInst.firstMethod();
+
         assertEquals("Checking if i can write a Junit test", result, "Incorrect");
     }
 }
