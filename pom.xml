@@ -90,7 +90,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.yourpackage.MainClass</mainClass>
+                            <mainClass>com.example.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
